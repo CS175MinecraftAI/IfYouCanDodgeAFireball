@@ -6,11 +6,11 @@ title:  Team
 # {{ page.title }}
 
 
-## USER 1
-***UCI Net ID***: ucinetid
+## Brad Guerrero
+***UCI Net ID***: bradg
 
-## USER 2
-***UCI Net ID***: ucinetid
+## Kevin Permana
+***UCI Net ID***: kpermana
 
-## USER 3
-***UCI Net ID***: ucinetid
+## Raymond Lam
+***UCI Net ID***: lamr4
