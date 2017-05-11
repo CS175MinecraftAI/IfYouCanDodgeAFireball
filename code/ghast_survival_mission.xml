@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <About>
+            <Summary>Survive an attack from a deadly Ghast!</Summary>
+        </About>
+
+        <ServerSection>
+            <ServerInitialConditions>
+                <Time>
+                    <StartTime>6000</StartTime>
+                    <AllowPassageOfTime>false</AllowPassageOfTime>
+                </Time>
+                <Weather>clear</Weather>
+                <AllowSpawning>false</AllowSpawning>
+            </ServerInitialConditions>
+            <ServerHandlers>
+                <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1" />
+                <DrawingDecorator>
+                    <DrawEntity type="Ghast" x="0" y="230" z="28"/>
+
+                    <DrawCuboid x1="-5" y1="226" z1="0" x2="5" y2="226" z2="30" type="stone_slab"/> <!-- Ground -->
+                    <DrawCuboid x1="-5" y1="236" z1="0" x2="5" y2="236" z2="30" type="cobblestone"/> <!-- Ceiling -->
+
+                    <DrawCuboid x1="-5" y1="226" z1="-1" x2="5" y2="236" z2="-1" type="cobblestone"/> <!-- Back wall -->
+                    <DrawCuboid x1="-5" y1="226" z1="31" x2="5" y2="236" z2="31" type="cobblestone"/> <!-- Front wall -->
+
+                    <DrawCuboid x1="-6" y1="226" z1="-1" x2="-6" y2="236" z2="31" type="cobblestone"/> <!-- Left wall -->
+                    <DrawCuboid x1="5" y1="226" z1="-1" x2="5" y2="236" z2="31" type="cobblestone"/> <!-- Front wall -->
+
+                    <DrawCuboid x1="-5" y1="230" z1="25" x2="5" y2="230" z2="25" type="diamond_block"/> <!-- Barrier -->
+
+                    <!-- Lighting -->
+                    <DrawBlock x="-5" y="227" z="10" type="beacon"/>
+                    <DrawBlock x="4" y="227" z="10" type="beacon"/>
+                    <DrawBlock x="-5" y="227" z="20" type="beacon"/>
+                    <DrawBlock x="4" y="227" z="20" type="beacon"/>
+                </DrawingDecorator>
+                <ServerQuitWhenAnyAgentFinishes />
+            </ServerHandlers>
+        </ServerSection>
+
+        <AgentSection mode="Survival">
+            <Name>Fighter</Name>
+            <AgentStart>
+                <Placement x="0.5" y="227.0" z="0.5"/>
+                <Inventory>
+                </Inventory>
+            </AgentStart>
+            <AgentHandlers>
+                <VideoProducer want_depth="false">
+                  <Width>960</Width>
+                  <Height>640</Height>
+                </VideoProducer>
+                <ContinuousMovementCommands turnSpeedDegs="480"/>
+                <AbsoluteMovementCommands/>
+                <SimpleCraftCommands/>
+                <MissionQuitCommands/>
+                <InventoryCommands/>
+                <ObservationFromNearbyEntities>
+                    <Range name="entities" xrange="40" yrange="40" zrange="40"/>
+                </ObservationFromNearbyEntities>
+                <ObservationFromFullInventory/>
+            </AgentHandlers>
+        </AgentSection>
+
+    </Mission>
