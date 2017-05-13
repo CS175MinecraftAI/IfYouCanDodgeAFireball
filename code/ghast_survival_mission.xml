@@ -34,6 +34,8 @@
                     <DrawBlock x="4" y="227" z="10" type="beacon"/>
                     <DrawBlock x="-5" y="227" z="20" type="beacon"/>
                     <DrawBlock x="4" y="227" z="20" type="beacon"/>
+                    <DrawBlock x="-5" y="227" z="25" type="beacon"/>
+                    <DrawBlock x="4" y="227" z="25" type="beacon"/>
                 </DrawingDecorator>
                 <ServerQuitWhenAnyAgentFinishes />
             </ServerHandlers>
@@ -44,6 +46,7 @@
             <AgentStart>
                 <Placement x="0.5" y="227.0" z="0.5"/>
                 <Inventory>
+                    <InventoryItem slot="0" type="iron_sword"/>
                 </Inventory>
             </AgentStart>
             <AgentHandlers>
