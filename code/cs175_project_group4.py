@@ -38,11 +38,19 @@ EntityInfo.__new__.__defaults__ = (0, 0, 0, 0, 0, "", "", "", 1)
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
+def angvel(target, current, scale):
+    '''Use sigmoid function to choose a delta that will help smoothly steer from current angle to target angle.'''
+    delta = target - current
+    while delta < -180:
+        delta += 360;
+    while delta > 180:
+        delta -= 360;
+    return (2.0 / (1.0 + math.exp(-delta/scale))) - 1.0
 # ----------------------------------------END FUNCTIONS------------------------------------------- #
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
-mission_file_no_ext = '../Sample_missions/ghast_survival_mission' # CS175 Project. Ghast Survival
+mission_file_no_ext = 'ghast_survival_mission' # CS175 Project. Ghast Survival
 
 player_location    = [0, 0, 0]                   # Player location. Used to calculate distance between player and fireball.
 player_x_pos       = 0                           # Player's x location. Used for state calculation
@@ -70,6 +78,7 @@ with open(mission_file, 'r') as f:
     print "Loading mission from %s" % mission_file
     mission_xml = f.read()
     my_mission = MalmoPython.MissionSpec(mission_xml, True)
+    my_mission.setViewpoint(0) #1 for 3rd person view
 
 # Set up a recording
 my_mission_record = MalmoPython.MissionRecordSpec()  # Records nothing by default
@@ -109,6 +118,25 @@ while world_state.is_mission_running:
     if world_state.number_of_observations_since_last_state > 0:
         msg = world_state.observations[-1].text
         ob = json.loads(msg)
+
+        # weird doesnt work, maybe need to specify mission spec
+        # agent_host.sendCommand("hotbar.1 1")  # Press the hotbar key
+        # agent_host.sendCommand("hotbar.1 0")  # Release hotbar key - agent should now be holding diamond_sword
+
+        # make the agent aim the ghast:
+        yaw = ob.get(u'Yaw', 0)
+        delta_yaw = angvel(0, yaw, 100.0)           # -180left, 180right
+        pitch = ob.get(u'Pitch', 0)
+        delta_pitch = angvel(-5.0, pitch, 100.0)     # -90top, 90down
+        agent_host.sendCommand("turn " + str(delta_yaw))
+        agent_host.sendCommand("pitch " + str(delta_pitch))
+
+        # debug:
+        agent_host.sendCommand("attack 1")
+
+        #print "-----------------------------------------------------------"
+        #print json.dumps(ob, indent=4, sort_keys=True)
+        #print "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
         if "Life" in ob:
             life = int(ob[u'Life'])
