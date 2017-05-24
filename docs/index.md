@@ -3,8 +3,6 @@ layout: default
 title:  Home
 ---
 
-Welcome to our website. It is amazing :)
+Welcome! You have landed on the website for Project IfYouCanDodgeAFireball
 
-This is a website for our CS175 Project in AI (Minecraft)
-
-Checkout the team page to see the team members!
+This project was created by Team Fireballers. Check out the team page for more information!
