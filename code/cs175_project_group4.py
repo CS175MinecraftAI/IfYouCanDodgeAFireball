@@ -51,6 +51,8 @@ episode_reward    = 0       # Reward obtained from last episode
 episode_running   = False   # Set to true at the beginning of episode
 episode_finished  = False
 
+random_policy = True
+
 # ------------------------------------------------------------------------------------------------ #
 # ----------------------------------------- FUNCTIONS -------------------------------------------- #
 # ------------------------------------------------------------------------------------------------ #
@@ -137,8 +139,8 @@ def set_world_observations(agent_host, waiting_for_episode):
                     fireball_location[2] = entity[2]
 
                     fireball_distance = int(distance(player_location, fireball_location))
-                    fireball_dx = int(player_location[0] - fireball_location[0])
-                    fireball_dz = int(player_location[2] - fireball_location[2])
+                    fireball_dx = player_location[0] - fireball_location[0] # Not rounded
+                    fireball_dz = player_location[2] - fireball_location[2] # Not rounded
                     # print "Fireball distance: ", fireball_distance
 
             if not fireball_active and episode_running:   # If there's no fireball active then the episode is over.
@@ -179,12 +181,32 @@ class Dodger(object):
     def is_solution(reward):
         return reward == 100
 
+    def hard_coded_policy(self):
+        x_dist = round(abs(player_start_x_pos_raw - player_x_pos_raw) * 4) / 4
+        curr_feedback = self.get_curr_feedback()
+        policy_action = ""
+
+        if curr_feedback > 0: # Non negative feedback
+            policy_action = "nothing"
+        elif x_dist >= 0 and "move_right" in possible_actions:
+            policy_action = "move_right"
+        elif x_dist <= 0 and "move_left" in possible_actions:
+            policy_action = "move_left"
+        else:
+            policy_action = "nothing"
+
+        print "policy:", policy_action, ",current state:", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
+
+        return policy_action
+
     # We use the distance from your start position to give feedback. Being farther from the start position returns better feedback.
     def get_curr_feedback(self):
         x_dist = abs(player_start_x_pos_raw - player_x_pos_raw)
 
-        if x_dist < 1: # Only positive if we are more than 1 unit away from our start position.
-            return episode_reward + ((1 - x_dist) * -50)
+        if x_dist < 2: # Only positive if we are more than 1 unit away from our start position.
+            return episode_reward + ((2.0 - x_dist) * -50)
+        else:
+            x_dist = int(x_dist)
 
         return episode_reward + int(x_dist * 50)
 
@@ -217,13 +239,14 @@ class Dodger(object):
         elif player_x_pos == 3:
             corner_val = 1  # Second to left corner
 
-        dist_from_start = player_start_x_pos_raw - player_x_pos_raw
-        if abs(dist_from_start) > 1:
-            dist_from_start = int(dist_from_start)
+        #fireball_dx_rounded = fireball_dx # or player_start_x_pos_raw - player_x_pos_raw
+        fireball_dx_rounded = player_start_x_pos_raw - player_x_pos_raw
+        if abs(fireball_dx_rounded) > 2:
+            fireball_dx_rounded = int(fireball_dx_rounded)
         else:
-            dist_from_start = round(dist_from_start * 4) / 4 # Round to nearest 0.25
+            fireball_dx_rounded = round(fireball_dx_rounded * 4) / 4 # Round to nearest 0.25
 
-        return corner_val, dist_from_start, fireball_dz
+        return corner_val, fireball_dx_rounded#, int(fireball_dz)
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
         """Chooses an action according to eps-greedy policy. """
@@ -234,12 +257,18 @@ class Dodger(object):
                 self.q_table[curr_state][action] = 0
 
         rnd = random.random()
+        a = 0
 
         if rnd < eps:   # below eps, give random action:
             # print "random : ", rnd
-            a = random.randint(0, len(possible_actions) - 1)
-
-            # TODO try writing policy where it goes away from starting position
+            if random_policy:
+                a = random.randint(0, len(possible_actions) - 1)
+                
+                print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
+                
+                return possible_actions[a]
+            else:
+                return self.hard_coded_policy()
 
         else:  # do e greedy policy:
             # get highest q value:
@@ -261,12 +290,7 @@ class Dodger(object):
 
             print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
 
-            return tempContainer[tmprnd][0]
-
-        print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
-
-        # print "random action : ", possible_actions[a]
-        return possible_actions[a]    
+            return tempContainer[tmprnd][0]  
 
     def get_possible_actions(self, agent_host, is_first_action=False):
         """Returns all possible actions that can be done at the current state. """
@@ -334,12 +358,6 @@ class Dodger(object):
 
                 if episode_running or episode_finished:
                     if t < T:
-                        self.act(agent_host, A[-1])
-
-                        time.sleep(0.5) # Gives time to act before getting feedback.
-
-                        R.append(self.get_curr_feedback())
-
                         if episode_finished:
                             # Terminating state
                             T = t + 1
@@ -351,9 +369,12 @@ class Dodger(object):
                             episode_finished = False
                             
                             if player_life > 0:
-                                print "Stop move"
                                 agent_host.sendCommand("strafe 0")
                         else:
+                            self.act(agent_host, A[-1])
+                            time.sleep(0.5) # Gives time to act before getting feedback.
+                            R.append(self.get_curr_feedback())
+
                             s = self.get_curr_state()
                             S.append(s)
                             possible_actions = self.get_possible_actions(agent_host)
@@ -400,7 +421,6 @@ if __name__ == '__main__':
             player_life = 10                # Reset player health
             started = True                  # Indicated that we have started the first mission.
 
-            print "Quit mission"
             agent_host.sendCommand("quit") # Re-start mission
 
             mission_file = mission_file_no_ext + ".xml"
