@@ -183,8 +183,8 @@ class Dodger(object):
     def get_curr_feedback(self):
         x_dist = abs(player_start_x_pos_raw - player_x_pos_raw)
 
-        if x_dist < 1.5: # Only positive if we are more than 1 unit away from our start position.
-            return episode_reward + ((1.5 - x_dist) * -50)
+        if x_dist < 1: # Only positive if we are more than 1 unit away from our start position.
+            return episode_reward + ((1 - x_dist) * -50)
 
         return episode_reward + int(x_dist * 50)
 
@@ -217,7 +217,13 @@ class Dodger(object):
         elif player_x_pos == 3:
             corner_val = 1  # Second to left corner
 
-        return corner_val, fireball_dx, fireball_dz
+        dist_from_start = player_start_x_pos_raw - player_x_pos_raw
+        if abs(dist_from_start) > 1:
+            dist_from_start = int(dist_from_start)
+        else:
+            dist_from_start = round(dist_from_start * 4) / 4 # Round to nearest 0.25
+
+        return corner_val, dist_from_start, fireball_dz
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
         """Chooses an action according to eps-greedy policy. """
@@ -229,12 +235,12 @@ class Dodger(object):
 
         rnd = random.random()
 
-        # print ""
-        print "current state :", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
-
         if rnd < eps:   # below eps, give random action:
             # print "random : ", rnd
             a = random.randint(0, len(possible_actions) - 1)
+
+            # TODO try writing policy where it goes away from starting position
+
         else:  # do e greedy policy:
             # get highest q value:
 
@@ -252,7 +258,12 @@ class Dodger(object):
 
             tmprnd = random.randint(0, len(tempContainer) - 1)
             # print "egreedy action : ", tempContainer[tmprnd][0]
+
+            print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
+
             return tempContainer[tmprnd][0]
+
+        print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
 
         # print "random action : ", possible_actions[a]
         return possible_actions[a]    
@@ -270,18 +281,16 @@ class Dodger(object):
         return action_list
 
     def act(self, agent_host, action):
-        print action + ",",
-
-        global episode_reward
+        # global episode_reward
         
         # Actions are move_left, move_right, nothing
         if action == "move_left":
             agent_host.sendCommand("strafe -1")
-            episode_reward -= 1
+            # episode_reward -= 1
             return -1
         elif action == "move_right":
             agent_host.sendCommand("strafe 1")
-            episode_reward -= 1
+            # episode_reward -= 1
             return -1
         else:
             agent_host.sendCommand("strafe 0")  # Do nothing
@@ -323,11 +332,12 @@ class Dodger(object):
             for t in xrange(sys.maxint):
                 set_world_observations(agent_host, not episode_running)
 
-                time.sleep(0.25)
-
                 if episode_running or episode_finished:
                     if t < T:
                         self.act(agent_host, A[-1])
+
+                        time.sleep(0.5) # Gives time to act before getting feedback.
+
                         R.append(self.get_curr_feedback())
 
                         if episode_finished:
@@ -360,6 +370,8 @@ class Dodger(object):
                             self.update_q_table(tau, S, A, R, T)
                         done_update = True
                         break
+                else:
+                    time.sleep(0.05) # Loop sleep
 
 # ------------------------------------------------------------------------------------------------ #
 # ----------------------------------------END AGENT CLASS----------------------------------------- #
