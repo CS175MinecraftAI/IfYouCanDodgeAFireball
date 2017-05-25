@@ -30,19 +30,29 @@
                     <DrawCuboid x1="-6" y1="226" z1="-1" x2="-6" y2="236" z2="31" type="cobblestone"/> <!-- Left wall -->
                     <DrawCuboid x1="5" y1="226" z1="-1" x2="5" y2="236" z2="31" type="cobblestone"/> <!-- Right wall -->
 
-                    <DrawCuboid x1="-5" y1="231" z1="25" x2="5" y2="231" z2="25" type="diamond_block"/> <!-- Barrier -->
+                    
+                    <DrawCuboid x1="-3" y1="233" z1="25" x2="-2" y2="233" z2="25" type="diamond_block"/>
+                    <DrawCuboid x1="3" y1="233" z1="25" x2="2" y2="233" z2="25" type="diamond_block"/>
+
+                    <DrawCuboid x1="-3" y1="228" z1="25" x2="-2" y2="228" z2="25" type="diamond_block"/>
+                    <DrawCuboid x1="3" y1="228" z1="25" x2="2" y2="228" z2="25" type="diamond_block"/>
+
+                    <DrawCuboid x1="-3" y1="234" z1="26" x2="3" y2="234" z2="26" type="diamond_block"/>
+                    <DrawCuboid x1="-3" y1="226" z1="26" x2="3" y2="226" z2="26" type="diamond_block"/>
 
                     <!-- Lighting -->
-                    <DrawBlock x="-5" y="227" z="4" type="beacon"/>
-                    <DrawBlock x="4" y="227" z="4" type="beacon"/>
-                    <DrawBlock x="-5" y="227" z="10" type="beacon"/>
-                    <DrawBlock x="4" y="227" z="10" type="beacon"/>
-                    <DrawBlock x="-5" y="227" z="20" type="beacon"/>
-                    <DrawBlock x="4" y="227" z="20" type="beacon"/>
-                    <DrawBlock x="-5" y="227" z="25" type="beacon"/>
-                    <DrawBlock x="4" y="227" z="25" type="beacon"/>                    	
-                    <DrawBlock x="-5" y="227" z="28" type="beacon"/>
-                    <DrawBlock x="4" y="227" z="28" type="beacon"/>                    	
+                    <DrawBlock x="0" y="232" z="1" type="beacon"/>
+
+                    <DrawBlock x="-5" y="234" z="4" type="beacon"/>
+                    <DrawBlock x="4" y="234" z="4" type="beacon"/>
+                    <DrawBlock x="-5" y="234" z="10" type="beacon"/>
+                    <DrawBlock x="4" y="234" z="10" type="beacon"/>
+                    <DrawBlock x="-5" y="234" z="20" type="beacon"/>
+                    <DrawBlock x="4" y="234" z="20" type="beacon"/>
+                    <DrawBlock x="-5" y="234" z="25" type="beacon"/>
+                    <DrawBlock x="4" y="234" z="25" type="beacon"/>                    	
+                    <DrawBlock x="-5" y="234" z="28" type="beacon"/>
+                    <DrawBlock x="4" y="234" z="28" type="beacon"/>                    	
                     <DrawBlock x="-5" y="234" z="28" type="beacon"/>
                     <DrawBlock x="4" y="234" z="28" type="beacon"/>
 
@@ -57,11 +67,12 @@
                 <Placement x="0.5" y="227.0" z="0.5"/>
                 <Inventory>
                     <InventoryItem slot="0" type="diamond_sword"/>
-                    <!--Equipped-->
+                    <!--Equipped
                     <InventoryItem slot="39" type="diamond_helmet"/>
                     <InventoryItem slot="38" type="diamond_chestplate"/>
                     <InventoryItem slot="37" type="diamond_leggings"/>
                     <InventoryItem slot="36" type="diamond_boots"/>
+                    -->
                 </Inventory>
             </AgentStart>
             <AgentHandlers>

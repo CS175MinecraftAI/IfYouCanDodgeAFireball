@@ -38,9 +38,13 @@ sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)         # flush print output
 
 mission_file_no_ext = 'ghast_survival_mission'              # CS175 Project. Ghast Survival
 
-player_x_pos       = 0     # Player's x location. Used for state calculation
-player_life        = 10    # Player's life
-fireball_distance  = 1000  # Distance between fireball and player
+player_start_x_pos_raw = 0     # Player's start x pos, the AI should learn to move away from this.
+player_x_pos           = 0     # Player's x location. Used for state calculation
+player_x_pos_raw       = 0     # Player's raw x pos
+player_life            = 10    # Player's life
+fireball_distance      = 1000  # Distance between fireball and player
+fireball_dx            = 1000  # Delta x between fireball and player
+fireball_dz            = 1000  # Delta z between fireball and player
 
 player_start_life = 10      # Player's life at beginning of episode
 episode_reward    = 0       # Reward obtained from last episode
@@ -67,7 +71,14 @@ def set_world_observations(agent_host, waiting_for_episode):
     global player_life
     global player_start_life
     global player_x_pos
+
+    global player_start_x_pos_raw
+    global player_x_pos_raw
+
     global fireball_distance
+    global fireball_dx
+    global fireball_dz
+
     global episode_running
     global episode_finished
     global episode_reward
@@ -82,12 +93,12 @@ def set_world_observations(agent_host, waiting_for_episode):
         # agent_host.sendCommand("hotbar.1 0")  # Release hotbar key - agent should now be holding diamond_sword
 
         # make the agent aim the ghast:
-        yaw = ob.get(u'Yaw', 0)
-        delta_yaw = angvel(0, yaw, 100.0)           # -180left, 180right
-        pitch = ob.get(u'Pitch', 0)
-        delta_pitch = angvel(-5.0, pitch, 100.0)     # -90top, 90down
-        agent_host.sendCommand("turn " + str(delta_yaw))
-        agent_host.sendCommand("pitch " + str(delta_pitch))
+        # yaw = ob.get(u'Yaw', 0)
+        # delta_yaw = angvel(0, yaw, 100.0)           # -180left, 180right
+        # pitch = ob.get(u'Pitch', 0)
+        # delta_pitch = angvel(-5.0, pitch, 100.0)     # -90top, 90down
+        # agent_host.sendCommand("turn " + str(delta_yaw))
+        # agent_host.sendCommand("pitch " + str(delta_pitch))
 
         # debug:
         # agent_host.sendCommand("attack 1")
@@ -96,10 +107,10 @@ def set_world_observations(agent_host, waiting_for_episode):
         #print json.dumps(ob, indent=4, sort_keys=True)
         #print "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-
         # Player location
         player_location = [0, 0, 0] # Used to calculate distance between fireball and player.
         if "XPos" in ob:
+            player_x_pos_raw = ob[u'XPos']
             player_x_pos = int(ob[u'XPos'])
             player_location[0] = player_x_pos
         if "YPos" in ob:
@@ -118,6 +129,7 @@ def set_world_observations(agent_host, waiting_for_episode):
                         episode_running = True
                         episode_reward = 0      # Reset episode reward.
                         episode_finished = False
+                        player_start_x_pos_raw = player_x_pos_raw # Set player start x pos, the fireball should be aiming here.
 
                     fireball_location = [1000, 1000, 1000] # Used to calculate distance between fireball and player.
                     fireball_location[0] = entity[0]
@@ -125,6 +137,8 @@ def set_world_observations(agent_host, waiting_for_episode):
                     fireball_location[2] = entity[2]
 
                     fireball_distance = int(distance(player_location, fireball_location))
+                    fireball_dx = int(player_location[0] - fireball_location[0])
+                    fireball_dz = int(player_location[2] - fireball_location[2])
                     # print "Fireball distance: ", fireball_distance
 
             if not fireball_active and episode_running:   # If there's no fireball active then the episode is over.
@@ -133,8 +147,6 @@ def set_world_observations(agent_host, waiting_for_episode):
 
         if "Life" in ob:
             life = int(ob[u'Life'])
-            if life < player_life: # We got damaged by a fireball
-                agent_host.sendCommand("chat aaaaaaaaargh!!!")
             player_life = life
 
             if waiting_for_episode and episode_running:     # If new episode has begun.
@@ -167,18 +179,45 @@ class Dodger(object):
     def is_solution(reward):
         return reward == 100
 
+    # We use the distance from your start position to give feedback. Being farther from the start position returns better feedback.
+    def get_curr_feedback(self):
+        x_dist = abs(player_start_x_pos_raw - player_x_pos_raw)
+
+        if x_dist < 1.5: # Only positive if we are more than 1 unit away from our start position.
+            return episode_reward + ((1.5 - x_dist) * -50)
+
+        return episode_reward + int(x_dist * 50)
+
     def calculate_reward(self):
         health_reward = 0
-        if player_start_life > player_life: # Player got damaged.
-            health_reward = -50     # Negative reward for getting hit by fireball.
 
-        return episode_reward + health_reward
+        if player_start_life > player_life:    # Player got damaged.
+            delta_health = int(player_start_life - player_life)
+            health_reward = -50 * delta_health # Negative reward for getting hit by fireball.
+            return episode_reward + health_reward
+
+        x_dist = abs(player_start_x_pos_raw - player_x_pos_raw)
+
+        return episode_reward + int(x_dist * 50)
 
     def get_curr_state(self):
-        # Distance from player to fireball (int)
-        # Location of player
-        # "10,7"
-        return player_x_pos, fireball_distance
+        # Location of player, fireball delta x, fireball delta z
+        # "10,-3,7"
+        # print "State: ", player_x_pos, fireball_dx, fireball_dz
+
+        corner_val = 0 # Not in a corner
+
+        if player_x_pos == -4:
+            corner_val = -2 # Right corner
+        elif player_x_pos == -3:
+            corner_val = -1 # Second to right corner
+
+        if player_x_pos == 4:
+            corner_val = 2  # Left corner
+        elif player_x_pos == 3:
+            corner_val = 1  # Second to left corner
+
+        return corner_val, fireball_dx, fireball_dz
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
         """Chooses an action according to eps-greedy policy. """
@@ -191,7 +230,7 @@ class Dodger(object):
         rnd = random.random()
 
         # print ""
-        print "current state : ", q_table[curr_state].items()
+        print "current state :", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
 
         if rnd < eps:   # below eps, give random action:
             # print "random : ", rnd
@@ -224,10 +263,9 @@ class Dodger(object):
 
         if player_x_pos > -4:
             action_list.append("move_right")
-        elif player_x_pos < 4:
+        
+        if player_x_pos < 4:
             action_list.append("move_left")
-        else:
-            agent_host.sendCommand("strafe 0")  # Do nothing
 
         return action_list
 
@@ -245,6 +283,8 @@ class Dodger(object):
             agent_host.sendCommand("strafe 1")
             episode_reward -= 1
             return -1
+        else:
+            agent_host.sendCommand("strafe 0")  # Do nothing
 
         return 0
 
@@ -283,12 +323,12 @@ class Dodger(object):
             for t in xrange(sys.maxint):
                 set_world_observations(agent_host, not episode_running)
 
-                time.sleep(0.1)
+                time.sleep(0.25)
 
                 if episode_running or episode_finished:
                     if t < T:
                         self.act(agent_host, A[-1])
-                        R.append(episode_reward)
+                        R.append(self.get_curr_feedback())
 
                         if episode_finished:
                             # Terminating state
@@ -299,7 +339,10 @@ class Dodger(object):
                             print "Reward:", final_reward
 
                             episode_finished = False
-                            agent_host.sendCommand("strafe 0")
+                            
+                            if player_life > 0:
+                                print "Stop move"
+                                agent_host.sendCommand("strafe 0")
                         else:
                             s = self.get_curr_state()
                             S.append(s)
@@ -336,40 +379,48 @@ if __name__ == '__main__':
     if agent_host.receivedArgument("test"):
         exit(0) # TODO: discover test-time folder names
 
-    mission_file = mission_file_no_ext + ".xml"
-    with open(mission_file, 'r') as f:
-        print "Loading mission from %s" % mission_file
-        mission_xml = f.read()
-        my_mission = MalmoPython.MissionSpec(mission_xml, True)
-        my_mission.setViewpoint(0) #1 for 3rd person view
-
-    # Set up a recording
-    my_mission_record = MalmoPython.MissionRecordSpec()  # Records nothing by default
-    # Attempt to start a mission
-    max_retries = 3
-    for retry in range(max_retries):
-        try:
-            agent_host.startMission(my_mission, my_mission_record)
-            break
-        except RuntimeError as e:
-            if retry == max_retries - 1:
-                print "Error starting mission:",e
-                exit(1)
-            else:
-                time.sleep(2)
-
-    # Waits for mission to start.
-    world_state = agent_host.getWorldState()
-    while not world_state.has_mission_begun:
-        time.sleep(0.1)
-        world_state = agent_host.getWorldState()
+    started = False
 
     num_reps = 30000
-    n=1
-    dodger = Dodger(n=n)
+    dodger = Dodger()
     for iRepeat in range(num_reps):
-        print (iRepeat+1), 'Learning Q-Table:',
-        dodger.run(agent_host)
+        if player_life <= 0 or not started: # Player died so we restart the level.
+            player_life = 10                # Reset player health
+            started = True                  # Indicated that we have started the first mission.
+
+            print "Quit mission"
+            agent_host.sendCommand("quit") # Re-start mission
+
+            mission_file = mission_file_no_ext + ".xml"
+            with open(mission_file, 'r') as f:
+                print "Loading mission from %s" % mission_file
+                mission_xml = f.read()
+                my_mission = MalmoPython.MissionSpec(mission_xml, True)
+                my_mission.setViewpoint(0) #1 for 3rd person view
+
+            # Set up a recording
+            my_mission_record = MalmoPython.MissionRecordSpec()  # Records nothing by default
+            # Attempt to start a mission
+            max_retries = 3
+            for retry in range(max_retries):
+                try:
+                    agent_host.startMission(my_mission, my_mission_record)
+                    break
+                except RuntimeError as e:
+                    if retry == max_retries - 1:
+                        print "Error starting mission:",e
+                        exit(1)
+                    else:
+                        time.sleep(2)
+
+            # Waits for mission to start.
+            world_state = agent_host.getWorldState()
+            while not world_state.has_mission_begun:
+                time.sleep(0.1)
+                world_state = agent_host.getWorldState()
+        else:
+            print (iRepeat+1), 'Learning Q-Table:',
+            dodger.run(agent_host)
 
         time.sleep(1)
 
