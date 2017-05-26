@@ -226,7 +226,6 @@ class Dodger(object):
         # Location of player, fireball delta x, fireball delta z
         # "10,-3,7"
         # print "State: ", player_x_pos, fireball_dx, fireball_dz
-
         corner_val = 0 # Not in a corner
 
         if player_x_pos == -4:
@@ -239,14 +238,14 @@ class Dodger(object):
         elif player_x_pos == 3:
             corner_val = 1  # Second to left corner
 
-        #fireball_dx_rounded = fireball_dx # or player_start_x_pos_raw - player_x_pos_raw
-        fireball_dx_rounded = player_start_x_pos_raw - player_x_pos_raw
+        fireball_dx_rounded = fireball_dx # or player_start_x_pos_raw - player_x_pos_raw
+        #fireball_dx_rounded = player_start_x_pos_raw - player_x_pos_raw
         if abs(fireball_dx_rounded) > 2:
             fireball_dx_rounded = int(fireball_dx_rounded)
         else:
             fireball_dx_rounded = round(fireball_dx_rounded * 4) / 4 # Round to nearest 0.25
 
-        return corner_val, fireball_dx_rounded#, int(fireball_dz)
+        return corner_val, fireball_dx_rounded, int(fireball_dz)
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
         """Chooses an action according to eps-greedy policy. """
@@ -371,7 +370,7 @@ class Dodger(object):
                             if player_life > 0:
                                 agent_host.sendCommand("strafe 0")
                         else:
-                            self.act(agent_host, A[-1])
+                            self.act(agent_host, A[-1]) # Do an action
                             time.sleep(0.5) # Gives time to act before getting feedback.
                             R.append(self.get_curr_feedback())
 
