@@ -397,8 +397,8 @@ class Dodger(object):
                                 self.update_q_table(tau, S, A, R, T)
                             done_update = True
                             break
-                    else:
-                        time.sleep(0.05) # Loop sleep
+            else:
+                time.sleep(0.05) # Loop sleep
 
 # ------------------------------------------------------------------------------------------------ #
 # ----------------------------------------END AGENT CLASS----------------------------------------- #
