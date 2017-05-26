@@ -3,6 +3,8 @@ layout: default
 title:  Home
 ---
 
-Welcome! You have landed on the website for Project IfYouCanDodgeAFireball
+# Welcome to the website of Team Fireballers!
 
-This project was created by Team Fireballers. Check out the team page for more information!
+![fireballers](http://img3.wikia.nocookie.net/__cb20140403191938/powerlisting/images/a/a5/Fire_Mario_Fireball.png)
+
+## Project IfYouCanDodgeAFireball

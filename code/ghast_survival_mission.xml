@@ -38,7 +38,7 @@
                     <DrawCuboid x1="3" y1="228" z1="25" x2="2" y2="228" z2="25" type="diamond_block"/>
 
                     <DrawCuboid x1="-3" y1="234" z1="26" x2="3" y2="234" z2="26" type="diamond_block"/>
-                    <DrawCuboid x1="-3" y1="226" z1="26" x2="3" y2="226" z2="26" type="diamond_block"/>
+                    <DrawCuboid x1="-3" y1="227" z1="26" x2="3" y2="227" z2="26" type="diamond_block"/>
 
                     <!-- Lighting -->
                     <DrawBlock x="0" y="232" z="1" type="beacon"/>

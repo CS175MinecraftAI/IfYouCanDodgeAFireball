@@ -175,6 +175,10 @@ class Dodger(object):
             n:      <int>    number of back steps to update (default = 1)
         """
         self.epsilon = 0.2  # chance of taking a random action instead of the best
+
+        self.epsilon = 0
+        self.alpha = 0.6
+
         self.q_table = {}
         self.n, self.alpha, self.gamma = n, alpha, gamma
 
@@ -238,14 +242,14 @@ class Dodger(object):
         elif player_x_pos == 3:
             corner_val = 1  # Second to left corner
 
-        fireball_dx_rounded = fireball_dx # or player_start_x_pos_raw - player_x_pos_raw
-        #fireball_dx_rounded = player_start_x_pos_raw - player_x_pos_raw
+        #fireball_dx_rounded = fireball_dx # or player_start_x_pos_raw - player_x_pos_raw
+        fireball_dx_rounded = player_start_x_pos_raw - player_x_pos_raw
         if abs(fireball_dx_rounded) > 2:
             fireball_dx_rounded = int(fireball_dx_rounded)
         else:
             fireball_dx_rounded = round(fireball_dx_rounded * 4) / 4 # Round to nearest 0.25
 
-        return corner_val, fireball_dx_rounded, int(fireball_dz)
+        return corner_val, fireball_dx_rounded#, int(fireball_dz)
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
         """Chooses an action according to eps-greedy policy. """
@@ -344,54 +348,57 @@ class Dodger(object):
         S, A, R = deque(), deque(), deque() # S = states, A = actions, R = rewards
         done_update = False
         while not done_update:
-            s0 = self.get_curr_state()
-            possible_actions = self.get_possible_actions(agent_host, True)
-            a0 = self.choose_action(s0, possible_actions, self.epsilon, self.q_table)
-            S.append(s0)
-            A.append(a0)
-            R.append(0)
+            set_world_observations(agent_host, True)
 
-            T = sys.maxint
-            for t in xrange(sys.maxint):
-                set_world_observations(agent_host, not episode_running)
+            if episode_running:
+                s0 = self.get_curr_state()
+                possible_actions = self.get_possible_actions(agent_host, True)
+                a0 = self.choose_action(s0, possible_actions, self.epsilon, self.q_table)
+                S.append(s0)
+                A.append(a0)
+                R.append(0)
 
-                if episode_running or episode_finished:
-                    if t < T:
-                        if episode_finished:
-                            # Terminating state
-                            T = t + 1
-                            S.append('Term State')
-                            final_reward = self.calculate_reward()
-                            R.append(final_reward)
-                            print "Reward:", final_reward
+                T = sys.maxint
+                for t in xrange(sys.maxint):
+                    set_world_observations(agent_host, False)
 
-                            episode_finished = False
-                            
-                            if player_life > 0:
-                                agent_host.sendCommand("strafe 0")
-                        else:
-                            self.act(agent_host, A[-1]) # Do an action
-                            time.sleep(0.5) # Gives time to act before getting feedback.
-                            R.append(self.get_curr_feedback())
+                    if episode_running or episode_finished:
+                        if t < T:
+                            if episode_finished:
+                                # Terminating state
+                                T = t + 1
+                                S.append('Term State')
+                                final_reward = self.calculate_reward()
+                                R.append(final_reward)
+                                print "Reward:", final_reward
 
-                            s = self.get_curr_state()
-                            S.append(s)
-                            possible_actions = self.get_possible_actions(agent_host)
-                            next_a = self.choose_action(s, possible_actions, self.epsilon, self.q_table)
-                            A.append(next_a)
+                                episode_finished = False
+                                
+                                if player_life > 0:
+                                    agent_host.sendCommand("strafe 0")
+                            else:
+                                self.act(agent_host, A[-1]) # Do an action
+                                time.sleep(0.5) # Gives time to act before getting feedback.
+                                R.append(self.get_curr_feedback())
 
-                    tau = t - self.n + 1
-                    if tau >= 0:
-                        self.update_q_table(tau, S, A, R, T)
+                                s = self.get_curr_state()
+                                S.append(s)
+                                possible_actions = self.get_possible_actions(agent_host)
+                                next_a = self.choose_action(s, possible_actions, self.epsilon, self.q_table)
+                                A.append(next_a)
 
-                    if tau == T - 1:
-                        while len(S) > 1:
-                            tau = tau + 1
+                        tau = t - self.n + 1
+                        if tau >= 0:
                             self.update_q_table(tau, S, A, R, T)
-                        done_update = True
-                        break
-                else:
-                    time.sleep(0.05) # Loop sleep
+
+                        if tau == T - 1:
+                            while len(S) > 1:
+                                tau = tau + 1
+                                self.update_q_table(tau, S, A, R, T)
+                            done_update = True
+                            break
+                    else:
+                        time.sleep(0.05) # Loop sleep
 
 # ------------------------------------------------------------------------------------------------ #
 # ----------------------------------------END AGENT CLASS----------------------------------------- #
@@ -450,7 +457,7 @@ if __name__ == '__main__':
                 time.sleep(0.1)
                 world_state = agent_host.getWorldState()
         else:
-            print (iRepeat+1), 'Learning Q-Table:',
+            print "Iteration", (iRepeat+1), 'Learning Q-Table'
             dodger.run(agent_host)
 
         time.sleep(1)
