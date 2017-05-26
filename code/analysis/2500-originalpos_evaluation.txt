@@ -1,0 +1,172 @@
+C:\Users\Kyaa\Anaconda2\python.exe C:/Users/Kyaa/Documents/GitHub/Local_Projects/CS175/Project/code/analysis/evaluation.py
+new dodge Record!  1  at episode :  1
+new hit Record!  1  at episode : 2
+new hit Record!  2  at episode : 3
+new dodge Record!  2  at episode :  5
+new dodge Record!  3  at episode :  6
+new dodge Record!  4  at episode :  17
+new dodge Record!  5  at episode :  18
+new dodge Record!  6  at episode :  19
+new dodge Record!  7  at episode :  20
+new dodge Record!  8  at episode :  21
+new dodge Record!  9  at episode :  22
+new dodge Record!  10  at episode :  23
+new dodge Record!  11  at episode :  24
+new dodge Record!  12  at episode :  25
+new dodge Record!  13  at episode :  26
+new dodge Record!  14  at episode :  50
+new dodge Record!  15  at episode :  51
+new dodge Record!  16  at episode :  52
+new dodge Record!  17  at episode :  106
+new dodge Record!  18  at episode :  107
+new dodge Record!  19  at episode :  108
+new dodge Record!  20  at episode :  135
+new dodge Record!  21  at episode :  136
+new dodge Record!  22  at episode :  137
+new dodge Record!  23  at episode :  173
+new dodge Record!  24  at episode :  174
+new dodge Record!  25  at episode :  175
+new dodge Record!  26  at episode :  176
+new dodge Record!  27  at episode :  177
+new dodge Record!  28  at episode :  178
+new dodge Record!  29  at episode :  179
+new dodge Record!  30  at episode :  180
+new dodge Record!  31  at episode :  181
+new dodge Record!  32  at episode :  182
+new dodge Record!  33  at episode :  183
+new dodge Record!  34  at episode :  184
+new dodge Record!  35  at episode :  185
+new dodge Record!  36  at episode :  186
+new dodge Record!  37  at episode :  187
+new dodge Record!  38  at episode :  188
+new dodge Record!  39  at episode :  189
+new dodge Record!  40  at episode :  190
+#############################################################################
+Episode :  0 - 191  :  191
+Longest Episode :  191
+Survival Rate :  170 / 191  :  0.890052356021
+new dodge Record!  41  at episode :  329
+new dodge Record!  42  at episode :  330
+new dodge Record!  43  at episode :  331
+new dodge Record!  44  at episode :  332
+new dodge Record!  45  at episode :  333
+new dodge Record!  46  at episode :  334
+new dodge Record!  47  at episode :  335
+new dodge Record!  48  at episode :  336
+new dodge Record!  49  at episode :  337
+new dodge Record!  50  at episode :  338
+new dodge Record!  51  at episode :  339
+new dodge Record!  52  at episode :  340
+new dodge Record!  53  at episode :  341
+new dodge Record!  54  at episode :  342
+new dodge Record!  55  at episode :  343
+new dodge Record!  56  at episode :  344
+new dodge Record!  57  at episode :  345
+new dodge Record!  58  at episode :  346
+new dodge Record!  59  at episode :  347
+new dodge Record!  60  at episode :  348
+new dodge Record!  61  at episode :  349
+new dodge Record!  62  at episode :  350
+new dodge Record!  63  at episode :  351
+new dodge Record!  64  at episode :  352
+new dodge Record!  65  at episode :  353
+new dodge Record!  66  at episode :  354
+new dodge Record!  67  at episode :  355
+new dodge Record!  68  at episode :  356
+new dodge Record!  69  at episode :  357
+new dodge Record!  70  at episode :  358
+new dodge Record!  71  at episode :  359
+new dodge Record!  72  at episode :  360
+new dodge Record!  73  at episode :  361
+new dodge Record!  74  at episode :  362
+new dodge Record!  75  at episode :  363
+new dodge Record!  76  at episode :  364
+new dodge Record!  77  at episode :  365
+new dodge Record!  78  at episode :  366
+new dodge Record!  79  at episode :  367
+new dodge Record!  80  at episode :  368
+new dodge Record!  81  at episode :  369
+new dodge Record!  82  at episode :  370
+new dodge Record!  83  at episode :  371
+new dodge Record!  84  at episode :  372
+new dodge Record!  85  at episode :  373
+new dodge Record!  86  at episode :  374
+new dodge Record!  87  at episode :  375
+#############################################################################
+Episode :  191 - 725  :  534
+Longest Episode :  534
+Survival Rate :  508 / 534  :  0.951310861423
+#############################################################################
+Episode :  725 - 960  :  235
+Longest Episode :  534
+Survival Rate :  216 / 235  :  0.91914893617
+#############################################################################
+Episode :  960 - 1132  :  172
+Longest Episode :  534
+Survival Rate :  160 / 172  :  0.93023255814
+new hit Record!  3  at episode : 1219
+#############################################################################
+Episode :  1132 - 1253  :  121
+Longest Episode :  534
+Survival Rate :  109 / 121  :  0.900826446281
+#############################################################################
+Episode :  1253 - 1418  :  165
+Longest Episode :  534
+Survival Rate :  151 / 165  :  0.915151515152
+#############################################################################
+Episode :  1418 - 1565  :  147
+Longest Episode :  534
+Survival Rate :  135 / 147  :  0.918367346939
+#############################################################################
+Episode :  1565 - 1688  :  123
+Longest Episode :  534
+Survival Rate :  108 / 123  :  0.878048780488
+new dodge Record!  88  at episode :  1980
+new dodge Record!  89  at episode :  1981
+new dodge Record!  90  at episode :  1982
+new dodge Record!  91  at episode :  1983
+new dodge Record!  92  at episode :  1984
+new dodge Record!  93  at episode :  1985
+new dodge Record!  94  at episode :  1986
+new dodge Record!  95  at episode :  1987
+new dodge Record!  96  at episode :  1988
+new dodge Record!  97  at episode :  1989
+new dodge Record!  98  at episode :  1990
+new dodge Record!  99  at episode :  1991
+new dodge Record!  100  at episode :  1992
+new dodge Record!  101  at episode :  2094
+new dodge Record!  102  at episode :  2095
+new dodge Record!  103  at episode :  2096
+new dodge Record!  104  at episode :  2097
+new dodge Record!  105  at episode :  2098
+new dodge Record!  106  at episode :  2099
+new dodge Record!  107  at episode :  2100
+new dodge Record!  108  at episode :  2101
+new dodge Record!  109  at episode :  2102
+new dodge Record!  110  at episode :  2103
+new dodge Record!  111  at episode :  2104
+new dodge Record!  112  at episode :  2105
+new dodge Record!  113  at episode :  2106
+new dodge Record!  114  at episode :  2107
+new dodge Record!  115  at episode :  2108
+new dodge Record!  116  at episode :  2109
+new dodge Record!  117  at episode :  2227
+new dodge Record!  118  at episode :  2228
+new dodge Record!  119  at episode :  2229
+new dodge Record!  120  at episode :  2230
+new dodge Record!  121  at episode :  2231
+#############################################################################
+Remaining Episode :  1565 - 2512  :  824
+Longest Episode   :  824
+Survival Rate     :  804 / 824  :  0.97572815534
+
+#############################################################################
+Longest Episodes               :  824
+Total iteration                :  2512
+number of Dead during this run :  8
+average survival rate          :  0.912892350077
+Best dodge streak!  121  at episode :  2231
+Best hit streak!  3  at episode : 1219
+Survival Rates                 :  ['0.89005', '0.95131', '0.91915', '0.93023', '0.90083', '0.91515', '0.91837', '0.87805']
+
+Process finished with exit code 0
