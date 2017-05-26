@@ -156,7 +156,7 @@ new dodge Record!  119  at episode :  2229
 new dodge Record!  120  at episode :  2230
 new dodge Record!  121  at episode :  2231
 #############################################################################
-Remaining Episode :  1565 - 2512  :  824
+Remaining Episode :  1688 - 2512  :  824
 Longest Episode   :  824
 Survival Rate     :  804 / 824  :  0.97572815534
 

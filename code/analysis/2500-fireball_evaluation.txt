@@ -310,7 +310,7 @@ Episode :  2216 - 2309  :  93
 Longest Episode :  418
 Survival Rate :  87 / 93  :  0.935483870968
 #############################################################################
-Remaining Episode :  2216 - 2491  :  182
+Remaining Episode :  2309 - 2491  :  182
 Longest Episode   :  418
 Survival Rate     :  181 / 182  :  0.994505494505
 

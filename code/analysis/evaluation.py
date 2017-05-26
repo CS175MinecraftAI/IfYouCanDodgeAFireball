@@ -116,7 +116,7 @@ def eval_this():
 
             # printing stuff after each dead:
             print "#############################################################################"
-            print "Remaining Episode : ", temp, "-", number_of_iteration, " : ", survival_time
+            print "Remaining Episode : ", last_dead, "-", number_of_iteration, " : ", survival_time
             print "Longest Episode   : ", longest_episode
             print "Survival Rate     : ", number_of_dodge_per_episode, "/", survival_time, " : ", survival_rate
 
