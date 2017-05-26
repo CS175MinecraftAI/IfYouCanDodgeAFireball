@@ -17,6 +17,6 @@ Ghasts are aggressive monsters in Minecraft that will shoot fireballs at players
 Our goal is to create an AI agent than can survive as long as possible against an onslaught of fireballs from a Ghast.
 
 ## Project Information
-### To learn more about our approach to the project and the project's status, please click on the "Status" tab located at the top of the page.
-### To learn more about the team, click the "Team Details" located at the top of the page.
-### Want to follow our GitHub repository? Click [HERE](https://github.com/CS175MinecraftAI/IfYouCanDodgeAFireball)
+#### To learn more about our approach to the project and the project's status, please click on the "Status" tab located at the top of the page.
+#### To learn more about the team, click the "Team Details" located at the top of the page.
+#### Want to follow our GitHub repository? Click [HERE](https://github.com/CS175MinecraftAI/IfYouCanDodgeAFireball)
