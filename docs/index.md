@@ -11,7 +11,7 @@ They say if you can dodge a fireball, then you can dodge a regular ball. Project
 Malmo API to survive an attack from a Ghast.
 
 ### Ghast
-<img src="http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg" width="500" height="250" align="middle"/>
+<img src="http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg" width="400" height="350" align="middle"/>
 
 Ghasts are aggressive monsters in Minecraft that will shoot fireballs at players on sight. If a fireball hits a player, the player takes damage.
 Our goal is to create an AI agent than can survive as long as possible against an onslaught of fireballs from a Ghast.
