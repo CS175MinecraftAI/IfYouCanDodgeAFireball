@@ -39,6 +39,7 @@ We have currently have two methods for calculating the state of the world. We wi
 
 #### Encoding Agent Location
 The first bit of information we wanted to encode into the state was the agent's location. Since the agent can only more 1-dimensionally, this is only 1 value. However we reduced the player’s location to five different values, giving each a numeric value: left_corner +2, middle_left +1, middle 0 , middle_right -1, right_corner -2.  When the agent is in the middle, it is unobstructed by a wall, therefore it can move either left or right to dodge.  When the agent is getting closer to the left wall, it would want to avoid moving left and cornering itself, and vice versa for the right wall. We call this value the "corner value" of the agent.
+The first bit of information we wanted to encode into the state was the agent's location. Since the agent can only move 1-dimensionally, this is only 1 value. However we reduced the player’s location to five different values, giving each a numeric value: left_corner +2, middle_left +1, middle 0 , middle_right -1, right_corner -2.  When the agent is in the middle, it is unobstructed by a wall, therefore it can move either left or right to dodge.  When the agent is getting closer to the left wall, it would want to avoid moving left and cornering itself, and vice versa for the right wall. We call this value the "corner value" of the agent.
 
 #### Visualization of the corner value in relation to the environment
 <img src="http://i.imgur.com/KrCKk89.png"/>
@@ -65,6 +66,7 @@ We will assess our AI using quantitative and qualitative methods. We also will a
 We ran our AI for 2,500 episodes (fireballs) with the parameters described in the Q-learning section above.
 
 Our baseline for our agent is 66% fireball dodge rate, the method to achieve this result is to do a random polcy between our possible actions. Moving right or left allows the AI to dodge a fireball while doing nothing the entire episode results in getting hit by the fireball.
+Our baseline for our agent is 66% fireball dodge rate, the method to achieve this result is to do a random policy between our possible actions. Moving right or left allows the AI to dodge a fireball while doing nothing the entire episode results in getting hit by the fireball.
 
 #### State method 1 (Blue) vs State method 2 (Green)
 <img src="http://i.imgur.com/enS7NEp.png"/>
