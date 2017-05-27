@@ -74,11 +74,9 @@ The above chart shows the performance of the AI using state method 1 (blue line)
 As one can see from the diagram, the dodge rate is improving significantly over time for state method 1 while the dodge rate for state method 2 seems to rise quickly at the beginning but begins to plateau. This is most likely because state method 1 has a larger state space than state method 2 and so it takes longer to for the agent to learn how to dodge fireballs. In both instances, high dodge rates are achieved and we managed to improve the dodging rate by around +23% over the baseline.
 
 ### Qualitative Evaluation
-One way to qualitatively evaluate the AI is to simply watch it dodge fireballs. We have made a simple video shown below that demonstrates the AI working using both state method 1 and state method 2.
+One way to qualitatively evaluate the AI is to simply watch it dodge fireballs and try to see if the AI is actually trying to dodge fireballs or if the AI is just dodging randomly. We have made a simple video shown below that demonstrates the AI working using both state method 1 and state method 2.
 
-<iframe width="420" height="315"
-src="https://www.youtube.com/watch?v=APLYlLdmxYg">
-</iframe>
+[![Status video](http://img.youtube.com/vi/APLYlLdmxYg/0.jpg)](https://www.youtube.com/watch?v=APLYlLdmxYg "Project IfYouCanDodgeAFireball - Status Video")
 
 # Remaining Goals and Challenges
 We understand that our current prototype is limited in that the agent is only dodging one fireball at a time and the Ghast cannot move around freely. Our remaining goal is to make our AI agent dodge multiple fireballs at the same time while possibly being in a more open arena. This means that multiple Ghasts must be spawned and so that the agent must keep track of multiple fireballs while the agent moves.
