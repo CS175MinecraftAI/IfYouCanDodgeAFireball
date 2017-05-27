@@ -40,8 +40,8 @@ We have currently have two methods for calculating the state of the world. We wi
 #### Encoding Agent Location
 The first bit of information we wanted to encode into the state was the agent's location. Since the agent can only more 1-dimensionally, this is only 1 value. However we reduced the player’s location to five different values, giving each a numeric value: left_corner +2, middle_left +1, middle 0 , middle_right -1, right_corner -2.  When the agent is in the middle, it is unobstructed by a wall, therefore it can move either left or right to dodge.  When the agent is getting closer to the left wall, it would want to avoid moving left and cornering itself, and vice versa for the right wall. We call this value the "corner value" of the agent.
 
-#### Visualization of the corner value
-<img src="http://i.imgur.com/Sk4tyQg.png"/>
+#### Visualization of the corner value in relation to the environment
+<img src="http://i.imgur.com/KrCKk89.png"/>
 
 #### State method 1: Fireball distance to agent
 One method of calculating state is to create a 3-tuple where the tuple contains (corner value, fireball delta x, fireball delta z) where fireball delta x and z refer to the positional difference between the fireball and the agent.
@@ -58,3 +58,27 @@ We currently consider the length of 1 episode to be the lifetime of 1 fireball. 
 
 Before the fireball reaches the agent, we give feedback on the agent's current movements. The feedback is based off how far the agent is from their start position, nd so staying still will yield a negative reward. This encourages the agent to move. If the agent manages to dodge a fireball, the final reward is positive and is scaled by how far the agent is when the fireball passes the agent. If the agent gets hit by a fireball, the reward is negative and is scaled by how much life the agent lost. We do this because the agent can lose less health if it is not hit head on by the fireball.
 
+# Evaluation
+We will assess our AI using quantitative and qualitative methods. We also will assess the performance of our AI using both state methods 1 and 2.
+
+### Quantitative Evaluation
+We ran our AI for 2,500 episodes (fireballs) with the parameters described in the Q-learning section above.
+
+Our baseline for our agent is 66% fireball dodge rate, the method to achieve this result is to do a random polcy between our possible actions. Moving right or left allows the AI to dodge a fireball while doing nothing the entire episode results in getting hit by the fireball.
+
+#### State method 1 (Blue) vs State method 2 (Green)
+<img src="http://i.imgur.com/enS7NEp.png"/>
+
+The above chart shows the performance of the AI using state method 1 (blue line) and state method 2 (green line). The y-axis indicates the dodge rate of the agent and the x-axis indicates how many episodes the agent has ran. Each dot represents a time where the agent died to a Ghast attack.
+
+As one can see from the diagram, the dodge rate is improving significantly over time for state method 1 while the dodge rate for state method 2 seems to rise quickly at the beginning but begins to plateau. This is most likely because state method 1 has a larger state space than state method 2 and so it takes longer to for the agent to learn how to dodge fireballs. In both instances, high dodge rates are achieved and we managed to improve the dodging rate by around +23% over the baseline.
+
+### Qualitative Evaluation
+One way to qualitatively evaluate the AI is to simply watch it dodge fireballs. We have made a simple video that demonstrates the AI working using both state method 1 and state method 2.
+
+[INSERT VIDEO HERE]
+
+# Remaining Goals and Challenges
+We understand that our current prototype is limited in that the agent is only dodging one fireball at a time and the Ghast cannot move around freely. Our remaining goal is to make our AI agent dodge multiple fireballs at the same time while possibly being in a more open arena. This means that multiple Ghasts must be spawned and so that the agent must keep track of multiple fireballs while the agent moves.
+
+In order to accomplish this, we need to build on top of our first approach. State method 2 is most likely not the best way to calculate the state, as simply keeping track of the distance to our starting position is not enough information to dodge multiple fireballs at once. We hope to somehow encode information about all active fireballs that will keep the state space small while conveying enough information to our agent about dodging the fireballs. As we continue to increase the complexity of our project, we may need to look into implementing a hard-coded policy as well, as a random policy may harm the learning speed of the agent in larger state spaces.
