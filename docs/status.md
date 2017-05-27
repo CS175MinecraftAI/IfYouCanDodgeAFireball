@@ -13,7 +13,7 @@ Project IfYouCanDodgeAFireball involves creating an AI agent in Minecraft that c
 We wanted to start small at the beginning, so we set up a simple environment where both the agent and a Ghast are inside an enclosed rectangular area. We set boundaries around the Ghast so that the Ghast’s movement is restricted, as otherwise the Ghast will move too close and it becomes too difficult for the agent to dodge the fireballs. As of right now, the agent can only move left and right to dodge fireballs, as we wanted to keep the list of actions small for now.
 
 #### Environment Setup
-<img src="http://i.imgur.com/7fP5THM.png" align="middle"/>
+<img src="http://i.imgur.com/7fP5THM.png" align="center"/>
 
 We are using Q-learning, a type of reinforcement learning, to approach the problem. We decided with Q-learning as we figured out that breaking our problem down into states, actions, rewards, and episodes, was what we needed to properly train the agent to dodge fireballs.
  
