@@ -76,7 +76,9 @@ As one can see from the diagram, the dodge rate is improving significantly over 
 ### Qualitative Evaluation
 One way to qualitatively evaluate the AI is to simply watch it dodge fireballs. We have made a simple video that demonstrates the AI working using both state method 1 and state method 2.
 
-[INSERT VIDEO HERE]
+<iframe width="420" height="315"
+src="https://www.youtube.com/watch?v=APLYlLdmxYg">
+</iframe>
 
 # Remaining Goals and Challenges
 We understand that our current prototype is limited in that the agent is only dodging one fireball at a time and the Ghast cannot move around freely. Our remaining goal is to make our AI agent dodge multiple fireballs at the same time while possibly being in a more open arena. This means that multiple Ghasts must be spawned and so that the agent must keep track of multiple fireballs while the agent moves.
