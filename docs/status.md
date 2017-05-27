@@ -74,7 +74,7 @@ The above chart shows the performance of the AI using state method 1 (blue line)
 As one can see from the diagram, the dodge rate is improving significantly over time for state method 1 while the dodge rate for state method 2 seems to rise quickly at the beginning but begins to plateau. This is most likely because state method 1 has a larger state space than state method 2 and so it takes longer to for the agent to learn how to dodge fireballs. In both instances, high dodge rates are achieved and we managed to improve the dodging rate by around +23% over the baseline.
 
 ### Qualitative Evaluation
-One way to qualitatively evaluate the AI is to simply watch it dodge fireballs. We have made a simple video that demonstrates the AI working using both state method 1 and state method 2.
+One way to qualitatively evaluate the AI is to simply watch it dodge fireballs. We have made a simple video shown below that demonstrates the AI working using both state method 1 and state method 2.
 
 <iframe width="420" height="315"
 src="https://www.youtube.com/watch?v=APLYlLdmxYg">
