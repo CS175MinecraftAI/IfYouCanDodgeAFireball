@@ -37,22 +37,21 @@ n = 1 - The default n, refers to number of backsteps to update. Works well for o
 ### State Space
 We have currently have two methods for calculating the state of the world. We will show the differences between both methods in explanation and in terms of agent performance.
 
+#### Encoding Agent Location
 The first bit of information we wanted to encode into the state was the agent's location. Since the agent can only more 1-dimensionally, this is only 1 value. However we reduced the player’s location to five different values, giving each a numeric value: left_corner +2, middle_left +1, middle 0 , middle_right -1, right_corner -2.  When the agent is in the middle, it is unobstructed by a wall, therefore it can move either left or right to dodge.  When the agent is getting closer to the left wall, it would want to avoid moving left and cornering itself, and vice versa for the right wall. We call this value the "corner value" of the agent.
 
-### Visualization of the corner value
+#### Visualization of the corner value
 <img src="http://i.imgur.com/Sk4tyQg.png"/>
 
-### State method 1: Fireball distance to agent
+#### State method 1: Fireball distance to agent
 One method of calculating state is to create a 3-tuple where the tuple contains (corner value, fireball delta x, fireball delta z) where fireball delta x and z refer to the positional difference between the fireball and the agent.
 
 State size calculation: 5 (corner values) * 8 (maximum delta_x from fireball) * 30 (maximum delta_z from fireball) = 1200 states
 
-### State method 2: Distance to start
+#### State method 2: Distance to start
 Upon further thinking, we observed that the agent just needs to move away from its initial position -- since the Ghast aims for that location. This involves encoding a 2-tuple where the tuple contains (corner value, distance to start position).
 
 State size calculation: 5 (corner values) * 8 (maximum distance from start) = 40 states
-
-Initially, we intended to use the distance from the fireball and the agent (delta_x, delta_z) to tell the agent when it needs to get out of harm’s way.  Upon further thinking, we observed that the agent just needs to move away from its initial position -- since the Ghast aims for that location.  This approach is sufficient and greatly reduces the number of states we would have to take into account.  We reduced the player’s location to five different states, giving each a numeric value: left_corner +2, middle_left +1, middle 0 , middle_right -1, right_corner -2.  When the agent is in the middle, it is unobstructed by a wall, therefore it can move either left or right to dodge.  When the agent is getting closer to the left wall, it would want to avoid moving left and cornering itself, and vice versa for the right wall.  We give some feedback to the agent as it moves further away from its initial position.  For example, if the agent stays in its initial position, it is bound to get hit by the fireball, which is why it gets a very low feedback (-100).  As it moves either left or right away from its starting position, the reward increases; the greater the difference between its current position and its initial position, the greater the feedback.
 
 ### Rewards
 We currently consider the length of 1 episode to be the lifetime of 1 fireball. Since we wait 500 ms after issuing an action, each episode contains around 4 episode steps.
