@@ -29,8 +29,7 @@
 
                     <DrawCuboid x1="-6" y1="226" z1="-1" x2="-6" y2="236" z2="31" type="cobblestone"/> <!-- Left wall -->
                     <DrawCuboid x1="5" y1="226" z1="-1" x2="5" y2="236" z2="31" type="cobblestone"/> <!-- Right wall -->
-
-                    
+                   
                     <DrawCuboid x1="-3" y1="233" z1="25" x2="-2" y2="233" z2="25" type="diamond_block"/>
                     <DrawCuboid x1="3" y1="233" z1="25" x2="2" y2="233" z2="25" type="diamond_block"/>
 
@@ -76,6 +75,7 @@
                 </Inventory>
             </AgentStart>
             <AgentHandlers>
+                <ChatCommands/>
                 <VideoProducer want_depth="false">
                   <Width>960</Width>
                   <Height>640</Height>
