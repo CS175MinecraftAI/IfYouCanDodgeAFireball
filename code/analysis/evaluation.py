@@ -29,6 +29,8 @@ def eval_this():
 
     current_fireball_number = 0
 
+    last_episode_list = []
+
     '''
     Sample:
     best: nothing current state : (0, 0.0, 0.0) [('nothing', -6.0), ('move_left', -6.0), ('move_backward', -6.0), ('move_forward', -10.2), ('move_right', -7.56)]
@@ -48,7 +50,7 @@ def eval_this():
             if line.startswith("Loading"):
                 if number_of_iteration != 0:
                     temp = last_dead
-                    last_dead = number_of_iteration
+                    last_dead = current_fireball_number
                     survival_time = last_dead-temp
                     survival_rate = float(number_of_dodge_per_episode) / survival_time
 
@@ -56,11 +58,14 @@ def eval_this():
                         longest_episode = survival_time
 
                     # printing stuff after each dead:
+
                     print "#############################################################################"
                     print "Episode : ", temp, "-", last_dead, " : ", survival_time
                     print "Longest Episode : ", longest_episode
                     print "Survival Rate : ", number_of_dodge_per_episode, "/", survival_time, " : ", survival_rate
                     cum_survival_rate.append(survival_rate)
+
+                    last_episode_list.append(last_dead)
 
                     current_hit_streak = 0
                     current_dodge_streak = 0
@@ -83,7 +88,7 @@ def eval_this():
                 current_reward = line.split(" :  ", 1)[1]
                 current_reward = float(current_reward)
                 # write to txt for diagram:
-                output_file.writelines(str(number_of_iteration) + ' ' + str(current_reward) + '\n')
+                output_file.writelines(str(current_fireball_number) + ' ' + str(current_reward) + '\n')
 
                 ############
                 # Analysis:#
@@ -117,7 +122,7 @@ def eval_this():
 
         # printing report:
         if last_dead != number_of_iteration: # remaining episodes
-            survival_time = number_of_iteration - last_dead
+            survival_time = current_fireball_number - last_dead
             survival_rate = float(number_of_dodge_per_episode) / survival_time
 
             if survival_time > longest_episode:
@@ -138,7 +143,7 @@ def eval_this():
         print "Best dodge streak! ", best_dodge_streak, " at episode : ", best_dodge_streak_episode
         print "Best hit streak! ", best_hit_streak, " at episode :", best_hit_streak_episode
         print "Survival Rates                 : ",  ['%.5f' % elem for elem in cum_survival_rate]
-
+        print "Last Dead List                 : ", last_episode_list
 if __name__ == "__main__":
     eval_this()
 
