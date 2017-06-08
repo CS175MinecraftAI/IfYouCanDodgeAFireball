@@ -129,6 +129,10 @@ def set_world_observations(agent_host):
         if "ZPos" in ob:
             player_loc[1] = ob[u'ZPos']
 
+        if (int(player_loc[1]) > 19 or int(player_loc[1]) < 0 or int(player_loc[0]) > 10 or int(player_loc[0]) < -8): # Teleport out
+            agent_host.sendCommand('chat /tp 0.5 227 11')
+            set_world_observations(agent_host)
+
         fireballs_alive = [] # Fireballs that are alive
         ghasts_alive = []
 
@@ -174,7 +178,7 @@ def set_world_observations(agent_host):
             mid_point = [1000, 1000] # Mid_point defaults to player location
 
         if "Life" in ob:
-            life = int(ob[u'Life'])
+            life = ob[u'Life']
 
             if life < player_life:
                 player_delta_life = player_life - life
@@ -205,8 +209,8 @@ class Dodger(object):
         """
         self.epsilon = 0.2  # chance of taking a random action instead of the best
 
-        self.epsilon = 0
-        self.alpha = 0.6
+        # self.epsilon = 0
+        # self.alpha = 0.6
 
         self.q_table = {}
         self.n, self.alpha, self.gamma = n, alpha, gamma
@@ -496,7 +500,7 @@ if __name__ == '__main__':
                 print "Loading mission from %s" % mission_file
                 mission_xml = f.read()
                 my_mission = MalmoPython.MissionSpec(mission_xml, True)
-                my_mission.setViewpoint(0) #1 for 3rd person view
+                my_mission.setViewpoint(1) #1 for 3rd person view
 
             # Set up a recording
             my_mission_record = MalmoPython.MissionRecordSpec()  # Records nothing by default
@@ -521,7 +525,6 @@ if __name__ == '__main__':
 
             agent_host.sendCommand('chat /kill @e[type=Ghast]')
             time.sleep(0.2)
-
 
             agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
             agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
