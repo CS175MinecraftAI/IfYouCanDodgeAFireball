@@ -75,6 +75,31 @@ def angvel(target, current, scale):
         delta -= 360;
     return (2.0 / (1.0 + math.exp(-delta/scale))) - 1.0
 
+def resummon_Ghast(name):
+    if len(name) >= 4 or len(name) == 0:
+        return 0
+    print "Ghasts_alive : ", name
+
+    if "Ghast_1" not in name:
+        agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
+    if "Ghast_2" not in name:
+        agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
+    if "Ghast_3" not in name:
+        agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
+    if "Ghast_4" not in name:
+        agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
+
+    # if "Ghast_5" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
+    # if "Ghast_6" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
+    # if "Ghast_7" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast -30 230 -15 {CustomName:Ghast_7}')
+    # if "Ghast_8" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast 30 230 -15 {CustomName:Ghast_8}')
+
+    print "respawned ghast!"
+
 def set_world_observations(agent_host):
     global fireball_num
     global fireball_target_map
@@ -105,6 +130,7 @@ def set_world_observations(agent_host):
             player_loc[1] = ob[u'ZPos']
 
         fireballs_alive = [] # Fireballs that are alive
+        ghasts_alive = []
 
         if "entities" in ob:
             entities = [EntityInfo(**k) for k in ob["entities"]]
@@ -116,6 +142,12 @@ def set_world_observations(agent_host):
 
                     if name not in fireball_target_map.keys(): # Add new fireball
                         fireball_target_map[name] = [player_loc[0], player_loc[1]] # Maps fireball custom name to target point
+
+                if "Ghast_" in name:  # Entity is a re-named ghast
+                    ghasts_alive.append(name)  # This ghast is alive
+
+        # summon ghast if it despawned:
+        resummon_Ghast(ghasts_alive)
 
         # Now we have to delete fireballs from fireball_target_map that are dead
         for key in fireball_target_map.keys():
@@ -387,10 +419,15 @@ class Dodger(object):
 
             T = sys.maxint
             for t in xrange(sys.maxint):
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,245d,35d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,245d,-15d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,245d,10d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,245d,10d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,250d,35d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,250d,-15d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,250d,10d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,250d,10d]}')
+
+                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_5] {Pos:[-30d,250d,35d]}')
+                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_6] {Pos:[30d,250d,35d]}')
+                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_7] {Pos:[-30d,250d,-15d]}')
+                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_8] {Pos:[30d,250d,-15]}')
 
                 set_world_observations(agent_host)
 
@@ -483,12 +520,20 @@ if __name__ == '__main__':
                 world_state = agent_host.getWorldState()
 
             agent_host.sendCommand('chat /kill @e[type=Ghast]')
+            time.sleep(0.2)
+
 
             agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
             agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
             agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
             agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
-            agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=50] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
+
+            # agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
+            # agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
+            # agent_host.sendCommand('chat /summon Ghast -30 230 -15 {CustomName:Ghast_7}')
+            # agent_host.sendCommand('chat /summon Ghast 30 230 -15 {CustomName:Ghast_8}')
+
+            agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
         else:
             print "Iteration", (iRepeat/2), 'Learning Q-Table'
             dodger.run(agent_host)

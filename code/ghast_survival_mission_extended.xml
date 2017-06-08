@@ -29,12 +29,13 @@
                     <DrawCuboid x1="-10" y1="226" z1="20" x2="11" y2="227" z2="20" type="stone_slab"/> <!-- Front wall -->
                     <DrawCuboid x1="-10" y1="226" z1="-1" x2="-10" y2="227" z2="20" type="stone_slab"/> <!-- Left wall -->
                     <DrawCuboid x1="11" y1="226" z1="-1" x2="11" y2="227" z2="20" type="stone_slab"/> <!-- Right wall -->
-
-                    <DrawCuboid x1="-10" y1="228" z1="-1" x2="11" y2="228" z2="-1" type="stone_slab"/> <!-- Back wall -->
-                    <DrawCuboid x1="-10" y1="228" z1="20" x2="11" y2="228" z2="20" type="stone_slab"/> <!-- Front wall -->
-                    <DrawCuboid x1="-10" y1="228" z1="-1" x2="-10" y2="228" z2="20" type="stone_slab"/> <!-- Left wall -->
-                    <DrawCuboid x1="11" y1="228" z1="-1" x2="11" y2="228" z2="20" type="stone_slab"/> <!-- Right wall -->
-
+                    
+                    <!-- extra ring
+                    <DrawCuboid x1="-10" y1="228" z1="-1" x2="11" y2="228" z2="-1" type="stone_slab"/>
+                    <DrawCuboid x1="-10" y1="228" z1="20" x2="11" y2="228" z2="20" type="stone_slab"/> 
+                    <DrawCuboid x1="-10" y1="228" z1="-1" x2="-10" y2="228" z2="20" type="stone_slab"/> 
+                    <DrawCuboid x1="11" y1="228" z1="-1" x2="11" y2="228" z2="20" type="stone_slab"/>
+                    -->	
                 </DrawingDecorator>
                 <ServerQuitWhenAnyAgentFinishes />
             </ServerHandlers>
@@ -46,8 +47,8 @@
                 <Placement x="0.5" y="227.0" z="11"/>
                 <Inventory>
                     <InventoryItem slot="0" type="diamond_sword"/>
-                    <!--Equipped-->
-                    <InventoryItem slot="39" type="diamond_helmet"/>
+                    <!--Equipped
+                    <InventoryItem slot="39" type="diamond_helmet"/>-->
                     <InventoryItem slot="38" type="diamond_chestplate"/>
                     <InventoryItem slot="37" type="diamond_leggings"/>
                     <InventoryItem slot="36" type="diamond_boots"/>
