@@ -27,18 +27,14 @@ def eval_this():
 
     is_dodging_streak = True
 
-    current_fireball_number = 0
-
     '''
     Sample:
-    best: nothing current state : (0, 0.0, 0.0) [('nothing', -6.0), ('move_left', -6.0), ('move_backward', -6.0), ('move_forward', -10.2), ('move_right', -7.56)]
-    reward : -20.0
-    Last Reward :  -20.0
-    Loading mission from ghast_survival_mission_extended.xml
-    Iteration 1 Learning Q-Table
-    No Fireball!------------------------------------------------------
-    # of fireballs: 3
-    Last Reward : -20.0
+    Iteration 1281 Learning Q-Table
+    best: move_right current state : (2, 2, -24) -100.0 [('nothing', -51.0), ('move_right', 151.46697134926632)]
+    best: move_right current state : (2, 2, -24) -100.0 [('nothing', -51.0), ('move_right', 151.46697134926632)]
+    best: move_right current state : (1, 0.75, -18) -26.5339353272 [('nothing', 0), ('move_left', 0), ('move_right', 353.74113040985725)]
+    best: nothing current state : (0, -2, -8) 150 [('nothing', 208.2794183799413), ('move_left', 0), ('move_right', 0)]
+    Reward: 278
     '''
     with open(output_file_name, "w") as output_file:
         for line in open(input_file_name).readlines():
@@ -70,18 +66,13 @@ def eval_this():
                 number_of_dodge_per_episode = 0 # reset
                 continue
 
-            if line.startswith("# of fireballs"):
-                current_fireball_number = line.split(": ", 1)[1]
-                current_fireball_number = int(current_fireball_number)
-                continue
-
             if line.startswith("Iteration"):
                 number_of_iteration += 1
                 continue
 
-            if line.startswith("Last Reward"):
-                current_reward = line.split(" :  ", 1)[1]
-                current_reward = float(current_reward)
+            if line.startswith("Reward"):
+                current_reward = line.split(": ", 1)[1]
+                current_reward = int(current_reward)
                 # write to txt for diagram:
                 output_file.writelines(str(number_of_iteration) + ' ' + str(current_reward) + '\n')
 
