@@ -17,37 +17,20 @@
                 <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1" />
                 <DrawingDecorator>
                 	<!--Soft Reset the world:-->
-                    <DrawCuboid x1="-50" y1="226" z1="-50" x2="50" y2="236" z2="50" type="air" />
+                    <DrawCuboid x1="-50" y1="216" z1="-50" x2="50" y2="246" z2="50" type="air" />
 
-                    <DrawCuboid x1="-20" y1="226" z1="-10" x2="20" y2="226" z2="30" type="stone_slab"/> <!-- Ground -->
-
+                    <DrawCuboid x1="-10" y1="226" z1="-1" x2="11" y2="226" z2="20" type="stone_slab"/> <!-- Ground -->
+                
                     <!-- Player arena -->
                     <DrawCuboid x1="-10" y1="226" z1="-1" x2="11" y2="227" z2="-1" type="stone_slab"/> <!-- Back wall -->
                     <DrawCuboid x1="-10" y1="226" z1="20" x2="11" y2="227" z2="20" type="stone_slab"/> <!-- Front wall -->
                     <DrawCuboid x1="-10" y1="226" z1="-1" x2="-10" y2="227" z2="20" type="stone_slab"/> <!-- Left wall -->
                     <DrawCuboid x1="11" y1="226" z1="-1" x2="11" y2="227" z2="20" type="stone_slab"/> <!-- Right wall -->
 
-                    <DrawCuboid x1="-10" y1="230" z1="-1" x2="11" y2="230" z2="-1" type="stone_slab"/> <!-- Back wall -->
-                    <DrawCuboid x1="-10" y1="230" z1="20" x2="11" y2="230" z2="20" type="stone_slab"/> <!-- Front wall -->
-                    <DrawCuboid x1="-10" y1="230" z1="-1" x2="-10" y2="230" z2="20" type="stone_slab"/> <!-- Left wall -->
-                    <DrawCuboid x1="11" y1="230" z1="-1" x2="11" y2="230" z2="20" type="stone_slab"/> <!-- Right wall -->
-
-                    <DrawCuboid x1="-10" y1="234" z1="-1" x2="11" y2="234" z2="-1" type="stone_slab"/> <!-- Back wall -->
-                    <DrawCuboid x1="-10" y1="234" z1="20" x2="11" y2="234" z2="20" type="stone_slab"/> <!-- Front wall -->
-                    <DrawCuboid x1="-10" y1="234" z1="-1" x2="-10" y2="234" z2="20" type="stone_slab"/> <!-- Left wall -->
-                    <DrawCuboid x1="11" y1="234" z1="-1" x2="11" y2="234" z2="20" type="stone_slab"/> <!-- Right wall -->
-
-                    <!-- Ceiling -->
-                    <DrawCuboid x1="-20" y1="236" z1="-10" x2="20" y2="236" z2="30" type="beacon"/>
-
-                    <DrawCuboid x1="-20" y1="226" z1="-10" x2="20" y2="236" z2="-10" type="diamond_block"/>
-                    <DrawCuboid x1="-20" y1="226" z1="30" x2="20" y2="236" z2="30" type="diamond_block"/>
-                    <DrawCuboid x1="-20" y1="226" z1="-10" x2="-20" y2="236" z2="30" type="diamond_block"/>
-                    <DrawCuboid x1="20" y1="226" z1="-10" x2="20" y2="236" z2="30" type="diamond_block"/>
-
-                    <DrawEntity type="Ghast" x="0" y="230" z="28"/>
-                    <DrawEntity type="Ghast" x="0" y="230" z="28"/>
-                    <DrawEntity type="Ghast" x="0" y="230" z="28"/>
+                    <DrawCuboid x1="-10" y1="228" z1="-1" x2="11" y2="228" z2="-1" type="stone_slab"/> <!-- Back wall -->
+                    <DrawCuboid x1="-10" y1="228" z1="20" x2="11" y2="228" z2="20" type="stone_slab"/> <!-- Front wall -->
+                    <DrawCuboid x1="-10" y1="228" z1="-1" x2="-10" y2="228" z2="20" type="stone_slab"/> <!-- Left wall -->
+                    <DrawCuboid x1="11" y1="228" z1="-1" x2="11" y2="228" z2="20" type="stone_slab"/> <!-- Right wall -->
 
                 </DrawingDecorator>
                 <ServerQuitWhenAnyAgentFinishes />

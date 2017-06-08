@@ -119,18 +119,23 @@ def set_world_observations(agent_host):
                 del fireball_target_map[key]
 
         # Now we have to calculate the mid_point
-        num_points = len(fireballs_alive)
+        num_points = len(fireball_target_map)
         mid_point = [0, 0] # Reset mid point
+
+        #print "Our location ", player_loc
+        #print "VALUES: ", fireball_target_map
 
         if num_points > 0:
             for target in fireball_target_map.values():
                 mid_point[0] += target[0]
                 mid_point[1] += target[1]
 
-            mid_point[0] /= num_points
-            mid_point[1] /= num_points
+            mid_point[0] /= float(num_points)
+            mid_point[1] /= float(num_points)
+
+            #print "mid_point: ", mid_point
         else:
-            mid_point = [1000, 1000]
+            mid_point = [1000, 1000] # Mid_point defaults to player location
 
         if "Life" in ob:
             life = int(ob[u'Life'])
@@ -170,31 +175,58 @@ class Dodger(object):
         self.q_table = {}
         self.n, self.alpha, self.gamma = n, alpha, gamma
 
-    def is_solution(reward):
-        return reward == 100
-
-    def hard_coded_policy(self):
-        return 0
-
-    # We use the distance from your start position to give feedback. Being farther from the start position returns better feedback.
-    def get_curr_feedback(self):
-        
-        if (mid_point != [1000, 1000]):
-            print "player loc:", player_loc
-            print "mid_point:", mid_point
-            print "distance to mid_point: ", distance_2d(player_loc, mid_point)
-
+    def hard_coded_policy(self): # TODO XD
         return 0
 
     def calculate_reward(self):
-        return 0
+        if (mid_point[0] == 1000): # Default mid_point
+            return 0
 
-    def get_curr_state(self):
+        dist_to_midpoint = round(distance_2d(player_loc, mid_point) * 4) / 4
+        distance_reward = 0
+        if (dist_to_midpoint <= 2):
+            distance_reward = (2 - dist_to_midpoint) * -10
+        else:
+            distance_reward = dist_to_midpoint * 10
+
+        return (player_delta_life * -10) + distance_reward
+
+    def get_corner_val(self):
         corner_val = 0 # Not in a corner
 
-        #fireball_dx_rounded = round(fireball_dx_rounded * 4) / 4 # Round to nearest 0.25
+        loc_x = int(player_loc[0])
+        loc_z = int(player_loc[1])
+
+        if (loc_z == 19): # Cannot move forward 
+            if (loc_x == 10):
+                corner_val = 1
+            elif (loc_x == -8):
+                corner_val = 3
+            else:
+                corner_val = 2
+        elif (loc_z == 0):
+            if (loc_x == 10):
+                corner_val = 7
+            elif (loc_x == -8):
+                corner_val = 5
+            else:
+                corner_val = 6
+        elif (loc_x == 10):
+            corner_val = 8
+        elif (loc_x == -8):
+            corner_val = 4
 
         return corner_val
+
+    def get_curr_state(self):
+        dx_midpoint = round((mid_point[0] - player_loc[0]) * 4) / 4
+        dz_midpoint = round((mid_point[1] - player_loc[1]) * 4) / 4
+
+        if (mid_point[0] == 1000):
+            dx_midpoint = None
+            dz_midpoint = None
+
+        return self.get_corner_val(), dx_midpoint, dz_midpoint
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
         """Chooses an action according to eps-greedy policy. """
@@ -212,7 +244,7 @@ class Dodger(object):
             if random_policy:
                 a = random.randint(0, len(possible_actions) - 1)
                 
-                print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
+                print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), self.calculate_reward(), q_table[curr_state].items()
                 
                 return possible_actions[a]
             else:
@@ -236,19 +268,30 @@ class Dodger(object):
             tmprnd = random.randint(0, len(tempContainer) - 1)
             # print "egreedy action : ", tempContainer[tmprnd][0]
 
-            print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), self.get_curr_feedback(), q_table[curr_state].items()
+            print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), self.calculate_reward(), q_table[curr_state].items()
 
             return tempContainer[tmprnd][0]  
 
     def get_possible_actions(self, agent_host, is_first_action=False):
         """Returns all possible actions that can be done at the current state. """
-        action_list = ["nothing"]
+        if (mid_point[0] == 1000):
+            return ["nothing"]
 
-        # if player_x_pos > -4:
-        #     action_list.append("move_right")
-        
-        # if player_x_pos < 4:
-        #     action_list.append("move_left")
+        action_list = ["nothing", "move_left", "move_right", "move_forward", "move_backward"]
+
+        corner_val = self.get_corner_val()
+
+        if (corner_val == 1 or corner_val == 2 or corner_val == 3):
+            action_list.remove("move_forward")
+
+        if (corner_val == 1 or corner_val == 8 or corner_val == 7):
+            action_list.remove("move_left")
+
+        if (corner_val == 3 or corner_val == 4 or corner_val == 5):
+            action_list.remove("move_right")
+
+        if (corner_val == 7 or corner_val == 6 or corner_val == 5):
+            action_list.remove("move_backward")
 
         return action_list
 
@@ -258,12 +301,15 @@ class Dodger(object):
         # Actions are move_left, move_right, nothing
         if action == "move_left":
             agent_host.sendCommand("strafe -1")
-            return -1
         elif action == "move_right":
             agent_host.sendCommand("strafe 1")
-            return -1
-        else:
-            agent_host.sendCommand("strafe 0")  # Do nothing
+        elif action == "move_forward":
+            agent_host.sendCommand("move 1")
+        elif action == "move_backward":
+            agent_host.sendCommand("move -1")
+        else: # Do nothing
+            agent_host.sendCommand("strafe 0")
+            agent_host.sendCommand("move 0")
 
         return 0
 
@@ -300,6 +346,11 @@ class Dodger(object):
 
             T = sys.maxint
             for t in xrange(sys.maxint):
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,230d,35d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,230d,-15d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,230d,10d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,230d,10d]}')
+
                 set_world_observations(agent_host)
 
                 if t < T:
@@ -309,15 +360,10 @@ class Dodger(object):
                         S.append('Term State')
                         final_reward = self.calculate_reward()
                         R.append(final_reward)
-                        print "Reward:", final_reward
-                        
-                        if player_life > 0:
-                            agent_host.sendCommand("strafe 0")
-                            agent_host.sendCommand("move 0")
                     else:
                         self.act(agent_host, A[-1]) # Do an action
                         time.sleep(0.1) # Gives time to act before getting feedback.
-                        R.append(self.get_curr_feedback())
+                        R.append(self.calculate_reward())
 
                         s = self.get_curr_state()
                         S.append(s)
@@ -393,7 +439,13 @@ if __name__ == '__main__':
                 time.sleep(0.1)
                 world_state = agent_host.getWorldState()
 
-            agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=30] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
+            agent_host.sendCommand('chat /kill @e[type=Ghast]')
+
+            agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
+            agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
+            agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
+            agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
+            agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=50] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
         else:
             print "Iteration", (iRepeat+1), 'Learning Q-Table'
             dodger.run(agent_host)
