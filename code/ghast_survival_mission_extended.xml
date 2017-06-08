@@ -19,8 +19,9 @@
                 <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1" />
                 <DrawingDecorator>
                 	<!--Soft Reset the world:-->
-                    <DrawCuboid x1="-50" y1="216" z1="-50" x2="50" y2="246" z2="50" type="air" />
+                    <DrawCuboid x1="-35" y1="224" z1="-35" x2="35" y2="246" z2="35" type="air" />
 
+                   	<DrawCuboid x1="-35" y1="224" z1="-35" x2="35" y2="220" z2="35" type="lava" />
                     <DrawCuboid x1="-10" y1="226" z1="-1" x2="11" y2="226" z2="20" type="stone_slab"/> <!-- Ground -->
                 
                     <!-- Player arena -->
@@ -45,12 +46,12 @@
                 <Placement x="0.5" y="227.0" z="11"/>
                 <Inventory>
                     <InventoryItem slot="0" type="diamond_sword"/>
-                    <!--Equipped
+                    <!--Equipped-->
                     <InventoryItem slot="39" type="diamond_helmet"/>
                     <InventoryItem slot="38" type="diamond_chestplate"/>
                     <InventoryItem slot="37" type="diamond_leggings"/>
                     <InventoryItem slot="36" type="diamond_boots"/>
-                    -->
+                    
                 </Inventory>
             </AgentStart>
             <AgentHandlers>

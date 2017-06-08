@@ -52,6 +52,10 @@ actions = ["nothing", "move_left", "move_right", "move_forward", "move_backward"
 
 random_policy = True
 
+num_of_fireball = 0
+resting = True
+last_reward = 0
+
 # ------------------------------------------------------------------------------------------------ #
 # ----------------------------------------- FUNCTIONS -------------------------------------------- #
 # ------------------------------------------------------------------------------------------------ #
@@ -197,23 +201,42 @@ class Dodger(object):
         loc_x = int(player_loc[0])
         loc_z = int(player_loc[1])
 
-        if (loc_z == 19): # Cannot move forward 
-            if (loc_x == 10):
+        # if (loc_z == 19): # Cannot move forward
+        #     if (loc_x == 10):
+        #         corner_val = 1
+        #     elif (loc_x == -8):
+        #         corner_val = 3
+        #     else:
+        #         corner_val = 2
+        # elif (loc_z == 0):
+        #     if (loc_x == 10):
+        #         corner_val = 7
+        #     elif (loc_x == -8):
+        #         corner_val = 5
+        #     else:
+        #         corner_val = 6
+        # elif (loc_x == 10):
+        #     corner_val = 8
+        # elif (loc_x == -8):
+        #     corner_val = 4
+
+        if (loc_z > 18): # Cannot move forward
+            if (loc_x > 9):
                 corner_val = 1
-            elif (loc_x == -8):
+            elif (loc_x < -7):
                 corner_val = 3
             else:
                 corner_val = 2
-        elif (loc_z == 0):
-            if (loc_x == 10):
+        elif (loc_z < 1):
+            if (loc_x > 9):
                 corner_val = 7
-            elif (loc_x == -8):
+            elif (loc_x < -7):
                 corner_val = 5
             else:
                 corner_val = 6
-        elif (loc_x == 10):
+        elif (loc_x > 9):
             corner_val = 8
-        elif (loc_x == -8):
+        elif (loc_x < -7):
             corner_val = 4
 
         return corner_val
@@ -229,6 +252,9 @@ class Dodger(object):
         return self.get_corner_val(), dx_midpoint, dz_midpoint
 
     def choose_action(self, curr_state, possible_actions, eps, q_table):
+
+        global last_reward
+
         """Chooses an action according to eps-greedy policy. """
         if curr_state not in self.q_table:
             self.q_table[curr_state] = {}
@@ -268,15 +294,29 @@ class Dodger(object):
             tmprnd = random.randint(0, len(tempContainer) - 1)
             # print "egreedy action : ", tempContainer[tmprnd][0]
 
-            print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), q_table[curr_state].items()
-            print "reward :", self.calculate_reward()
+            if not resting:
+                print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), q_table[curr_state].items()
+                last_reward = self.calculate_reward()
+                print "reward :", last_reward
 
             return tempContainer[tmprnd][0]  
 
     def get_possible_actions(self, agent_host, is_first_action=False):
         """Returns all possible actions that can be done at the current state. """
-        if (mid_point[0] == 1000):
+        global resting
+        global num_of_fireball
+        global last_reward
+
+        if mid_point[0] == 1000:
+            if not resting:
+                print "No Fireball!------------------------------------------------------"
+                num_of_fireball += 1
+                print "# of fireballs:", num_of_fireball
+                print "Last Reward : ", last_reward
+            resting = True
             return ["nothing"]
+
+        resting = False
 
         action_list = ["nothing", "move_left", "move_right", "move_forward", "move_backward"]
 
@@ -363,7 +403,7 @@ class Dodger(object):
                         R.append(final_reward)
                     else:
                         self.act(agent_host, A[-1]) # Do an action
-                        time.sleep(0.05) # Gives time to act before getting feedback.
+                        time.sleep(0.1) # Gives time to act before getting feedback.
                         R.append(self.calculate_reward())
 
                         s = self.get_curr_state()
@@ -388,6 +428,7 @@ class Dodger(object):
 # ------------------------------------------------------------------------------------------------ #
 
 if __name__ == '__main__':
+
     agent_host = MalmoPython.AgentHost()
     try:
         agent_host.parse( sys.argv )
@@ -414,6 +455,7 @@ if __name__ == '__main__':
 
             mission_file = mission_file_no_ext + ".xml"
             with open(mission_file, 'r') as f:
+                print "Last Reward : ", last_reward
                 print "Loading mission from %s" % mission_file
                 mission_xml = f.read()
                 my_mission = MalmoPython.MissionSpec(mission_xml, True)
@@ -437,7 +479,7 @@ if __name__ == '__main__':
             # Waits for mission to start.
             world_state = agent_host.getWorldState()
             while not world_state.has_mission_begun:
-                time.sleep(0.05)
+                time.sleep(0.1)
                 world_state = agent_host.getWorldState()
 
             agent_host.sendCommand('chat /kill @e[type=Ghast]')
@@ -450,6 +492,8 @@ if __name__ == '__main__':
         else:
             print "Iteration", (iRepeat/2), 'Learning Q-Table'
             dodger.run(agent_host)
+            if num_of_fireball > 1500:
+                exit()
 
         time.sleep(0.5)
 
