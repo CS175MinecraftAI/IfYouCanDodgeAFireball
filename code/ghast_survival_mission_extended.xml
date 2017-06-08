@@ -3,7 +3,9 @@
         <About>
             <Summary>Survive an attack from a deadly Ghast!</Summary>
         </About>
-
+        <ModSettings> 
+        	<MsPerTick>25</MsPerTick>
+        </ModSettings> 
         <ServerSection>
             <ServerInitialConditions>
                 <Time>

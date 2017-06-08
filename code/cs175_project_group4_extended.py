@@ -244,8 +244,8 @@ class Dodger(object):
             if random_policy:
                 a = random.randint(0, len(possible_actions) - 1)
                 
-                print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), self.calculate_reward(), q_table[curr_state].items()
-                
+                print "rand:", possible_actions[a], ",current state:", self.get_curr_state(), q_table[curr_state].items()
+                print "reward :", self.calculate_reward()
                 return possible_actions[a]
             else:
                 return self.hard_coded_policy()
@@ -268,7 +268,8 @@ class Dodger(object):
             tmprnd = random.randint(0, len(tempContainer) - 1)
             # print "egreedy action : ", tempContainer[tmprnd][0]
 
-            print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), self.calculate_reward(), q_table[curr_state].items()
+            print "best:", tempContainer[tmprnd][0], "current state :", self.get_curr_state(), q_table[curr_state].items()
+            print "reward :", self.calculate_reward()
 
             return tempContainer[tmprnd][0]  
 
@@ -346,10 +347,10 @@ class Dodger(object):
 
             T = sys.maxint
             for t in xrange(sys.maxint):
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,230d,35d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,230d,-15d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,230d,10d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,230d,10d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,245d,35d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,245d,-15d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,245d,10d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,245d,10d]}')
 
                 set_world_observations(agent_host)
 
@@ -362,7 +363,7 @@ class Dodger(object):
                         R.append(final_reward)
                     else:
                         self.act(agent_host, A[-1]) # Do an action
-                        time.sleep(0.1) # Gives time to act before getting feedback.
+                        time.sleep(0.05) # Gives time to act before getting feedback.
                         R.append(self.calculate_reward())
 
                         s = self.get_curr_state()
@@ -431,12 +432,12 @@ if __name__ == '__main__':
                         print "Error starting mission:",e
                         exit(1)
                     else:
-                        time.sleep(2)
+                        time.sleep(1)
 
             # Waits for mission to start.
             world_state = agent_host.getWorldState()
             while not world_state.has_mission_begun:
-                time.sleep(0.1)
+                time.sleep(0.05)
                 world_state = agent_host.getWorldState()
 
             agent_host.sendCommand('chat /kill @e[type=Ghast]')
@@ -447,9 +448,9 @@ if __name__ == '__main__':
             agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
             agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=50] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
         else:
-            print "Iteration", (iRepeat+1), 'Learning Q-Table'
+            print "Iteration", (iRepeat/2), 'Learning Q-Table'
             dodger.run(agent_host)
 
-        time.sleep(1)
+        time.sleep(0.5)
 
     print "Mission ended"
