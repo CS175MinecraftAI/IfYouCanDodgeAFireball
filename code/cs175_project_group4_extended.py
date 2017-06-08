@@ -539,7 +539,10 @@ if __name__ == '__main__':
             agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
         else:
             print "Iteration", (iRepeat/2), 'Learning Q-Table'
+            start_time = time.time()
             dodger.run(agent_host)
+            elapsed_time = time.time() - start_time
+            print "Episode", (iRepeat/2), "length:", elapsed_time
             if num_of_fireball > 1500:
                 exit()
 
