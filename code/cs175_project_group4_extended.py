@@ -222,12 +222,14 @@ class Dodger(object):
         if (mid_point[0] == 1000): # Default mid_point
             return 0
 
-        dist_to_midpoint = round(distance_2d(player_loc, mid_point) * 4) / 4
+        dist_to_midpoint = distance_2d(player_loc, mid_point)
         distance_reward = 0
-        if (dist_to_midpoint <= 2):
-            distance_reward = (2 - dist_to_midpoint) * -10
+        if (dist_to_midpoint < 1):
+            distance_reward = (3 - round(dist_to_midpoint, 1)) * -10
+        elif (dist_to_midpoint <= 3):
+            distance_reward = (3 - (round(dist_to_midpoint * 4) / 4)) * -10
         else:
-            distance_reward = dist_to_midpoint * 10
+            distance_reward = (round(dist_to_midpoint * 4) / 4) * 10
 
         return (player_delta_life * -10) + distance_reward
 
@@ -278,8 +280,16 @@ class Dodger(object):
         return corner_val
 
     def get_curr_state(self):
-        dx_midpoint = round((mid_point[0] - player_loc[0]) * 4) / 4
-        dz_midpoint = round((mid_point[1] - player_loc[1]) * 4) / 4
+        dist_to_midpoint = distance_2d(player_loc, mid_point)
+        dx_midpoint = None
+        dz_midpoint = None
+
+        if dist_to_midpoint < 1:
+            dx_midpoint = round((mid_point[0] - player_loc[0]), 1)
+            dz_midpoint = round((mid_point[1] - player_loc[1]), 1)
+        else:
+            dx_midpoint = round((mid_point[0] - player_loc[0]) * 4) / 4
+            dz_midpoint = round((mid_point[1] - player_loc[1]) * 4) / 4
 
         if (mid_point[0] == 1000):
             dx_midpoint = None
@@ -377,13 +387,13 @@ class Dodger(object):
         
         # Actions are move_left, move_right, nothing
         if action == "move_left":
-            agent_host.sendCommand("strafe -1")
+            agent_host.sendCommand("strafe -2")
         elif action == "move_right":
-            agent_host.sendCommand("strafe 1")
+            agent_host.sendCommand("strafe 2")
         elif action == "move_forward":
-            agent_host.sendCommand("move 1")
+            agent_host.sendCommand("move 2")
         elif action == "move_backward":
-            agent_host.sendCommand("move -1")
+            agent_host.sendCommand("move -2")
         else: # Do nothing
             agent_host.sendCommand("strafe 0")
             agent_host.sendCommand("move 0")
@@ -445,6 +455,7 @@ class Dodger(object):
                     else:
                         self.act(agent_host, A[-1]) # Do an action
                         time.sleep(0.1) # Gives time to act before getting feedback.
+                        print "Did:", A[-1], "Reward:", self.calculate_reward(), "State:", self.get_curr_state() 
                         R.append(self.calculate_reward())
 
                         s = self.get_curr_state()
@@ -543,7 +554,7 @@ if __name__ == '__main__':
             dodger.run(agent_host)
             elapsed_time = time.time() - start_time
             print "Episode", (iRepeat/2), "length:", elapsed_time
-            if num_of_fireball > 1500:
+            if (iRepeat/2) > 500:
                 exit()
 
         time.sleep(0.5)
