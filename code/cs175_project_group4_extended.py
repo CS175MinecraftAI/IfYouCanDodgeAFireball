@@ -131,7 +131,10 @@ def set_world_observations(agent_host):
 
         if (int(player_loc[1]) > 19 or int(player_loc[1]) < 0 or int(player_loc[0]) > 10 or int(player_loc[0]) < -8): # Teleport out
             agent_host.sendCommand('chat /tp 0.5 227 11')
+            fireball_target_map = { }   # Otherwise distance to mid_point will be high and thus yield a false high reward.
+            mid_point = [1000, 1000]    # Reset mid_point as well.
             set_world_observations(agent_host)
+            return
 
         fireballs_alive = [] # Fireballs that are alive
         ghasts_alive = []
@@ -222,15 +225,14 @@ class Dodger(object):
         if (mid_point[0] == 1000): # Default mid_point
             return 0
 
-        dist_to_midpoint = distance_2d(player_loc, mid_point)
+        dist_to_midpoint = distance_2d(player_loc, mid_point) # No rounding
         distance_reward = 0
-        if (dist_to_midpoint < 1):
-            distance_reward = (3 - round(dist_to_midpoint, 1)) * -10
-        elif (dist_to_midpoint <= 3):
-            distance_reward = (3 - (round(dist_to_midpoint * 4) / 4)) * -10
+        if (dist_to_midpoint <= 3):
+            distance_reward = (3 - dist_to_midpoint) * -10
         else:
-            distance_reward = (round(dist_to_midpoint * 4) / 4) * 10
+            distance_reward = dist_to_midpoint * 10
 
+        # Can add player delta life to reward calculation if needed
         return (player_delta_life * -10) + distance_reward
 
     def get_corner_val(self):
@@ -238,25 +240,6 @@ class Dodger(object):
 
         loc_x = int(player_loc[0])
         loc_z = int(player_loc[1])
-
-        # if (loc_z == 19): # Cannot move forward
-        #     if (loc_x == 10):
-        #         corner_val = 1
-        #     elif (loc_x == -8):
-        #         corner_val = 3
-        #     else:
-        #         corner_val = 2
-        # elif (loc_z == 0):
-        #     if (loc_x == 10):
-        #         corner_val = 7
-        #     elif (loc_x == -8):
-        #         corner_val = 5
-        #     else:
-        #         corner_val = 6
-        # elif (loc_x == 10):
-        #     corner_val = 8
-        # elif (loc_x == -8):
-        #     corner_val = 4
 
         if (loc_z > 18): # Cannot move forward
             if (loc_x > 9):
@@ -280,16 +263,8 @@ class Dodger(object):
         return corner_val
 
     def get_curr_state(self):
-        dist_to_midpoint = distance_2d(player_loc, mid_point)
-        dx_midpoint = None
-        dz_midpoint = None
-
-        if dist_to_midpoint < 1:
-            dx_midpoint = round((mid_point[0] - player_loc[0]), 1)
-            dz_midpoint = round((mid_point[1] - player_loc[1]), 1)
-        else:
-            dx_midpoint = round((mid_point[0] - player_loc[0]) * 4) / 4
-            dz_midpoint = round((mid_point[1] - player_loc[1]) * 4) / 4
+        dx_midpoint = int(mid_point[0] - player_loc[0])
+        dz_midpoint = int(mid_point[1] - player_loc[1])
 
         if (mid_point[0] == 1000):
             dx_midpoint = None
