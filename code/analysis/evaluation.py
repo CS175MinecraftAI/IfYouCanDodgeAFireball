@@ -3,8 +3,8 @@
 def eval_this():
     # input_file_name = "2500-originalpos.txt"
     # output_file_name = "analytic-originalpos.txt"
-    input_file_name = "final/log_file_4ghast-1500.txt"
-    output_file_name = "final/log_file_4ghast-1500-output.txt"
+    input_file_name = "final/log_file_4ghast-300episode.txt"
+    output_file_name = "final/log_file_4ghast-300episode-output.txt"
 
     number_of_dead = 0
     number_of_iteration = 0
@@ -31,16 +31,21 @@ def eval_this():
 
     last_episode_list = []
 
+    num_episode = 0
+    current_length = 0.0
+
     '''
     Sample:
-    best: nothing current state : (0, 0.0, 0.0) [('nothing', -6.0), ('move_left', -6.0), ('move_backward', -6.0), ('move_forward', -10.2), ('move_right', -7.56)]
-    reward : -20.0
-    Last Reward :  -20.0
+    Did: move_right Reward: -31.6999995 State: (0, 1.75, -0.25)
+    rand: move_forward ,current state: (0, 1.75, -0.25) [('nothing', 0), ('move_left', 0), ('move_backward', 0), ('move_forward', 0), ('move_right', 0)]
+    reward : -31.6999995
+    Episode 0 length: 6.9880001545
+    Last Reward :  -17.5
     Loading mission from ghast_survival_mission_extended.xml
     Iteration 1 Learning Q-Table
     No Fireball!------------------------------------------------------
-    # of fireballs: 3
-    Last Reward : -20.0
+    # of fireballs: 5
+    Last Reward :  -17.5
     '''
     with open(output_file_name, "w") as output_file:
         for line in open(input_file_name).readlines():
@@ -80,6 +85,12 @@ def eval_this():
                 current_fireball_number = int(current_fireball_number)
                 continue
 
+            if line.startswith("Episode"):
+                num_episode += 1
+                current_length = line.split(": ", 1)[1]
+                output_file.writelines(str(num_episode) + ' ' + str(current_length) + '\n')
+                continue
+
             if line.startswith("Iteration"):
                 number_of_iteration += 1
                 continue
@@ -88,7 +99,7 @@ def eval_this():
                 current_reward = line.split(" :  ", 1)[1]
                 current_reward = float(current_reward)
                 # write to txt for diagram:
-                output_file.writelines(str(current_fireball_number) + ' ' + str(current_reward) + '\n')
+                # output_file.writelines(str(current_fireball_number) + ' ' + str(current_reward) + '\n')
 
                 ############
                 # Analysis:#
