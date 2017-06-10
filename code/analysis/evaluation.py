@@ -3,8 +3,8 @@
 def eval_this():
     # input_file_name = "2500-originalpos.txt"
     # output_file_name = "analytic-originalpos.txt"
-    input_file_name = "final/log_file_4ghast-300episode.txt"
-    output_file_name = "final/log_file_4ghast-300episode-output.txt"
+    input_file_name = "final/log_file_4ghast-1500fb.txt"
+    output_file_name = "final/log_file_4ghast-1500fb-output.txt"
 
     number_of_dead = 0
     number_of_iteration = 0
