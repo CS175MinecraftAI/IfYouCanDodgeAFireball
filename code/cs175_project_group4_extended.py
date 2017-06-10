@@ -217,7 +217,7 @@ class Dodger(object):
 
         self.epsilon = 0.01
         self.alpha = 0.9
-        self.gamma = 0.7
+        self.gamma = 0.4
 
     def hard_coded_policy(self): # TODO XD
         return 0
