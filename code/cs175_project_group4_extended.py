@@ -216,7 +216,8 @@ class Dodger(object):
         self.n, self.alpha, self.gamma = n, alpha, gamma
 
         self.epsilon = 0.01
-        self.alpha = 0.6
+        self.alpha = 0.9
+        self.gamma = 0.7
 
     def hard_coded_policy(self): # TODO XD
         return 0
@@ -529,7 +530,7 @@ if __name__ == '__main__':
             dodger.run(agent_host)
             elapsed_time = time.time() - start_time
             print "Episode", (iRepeat/2), "length:", elapsed_time
-            if num_of_fireball > 1500:
+            if num_of_fireball > 500:
                 exit()
 
         time.sleep(0.5)
