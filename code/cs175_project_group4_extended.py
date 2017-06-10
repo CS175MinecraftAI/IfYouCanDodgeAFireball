@@ -210,13 +210,13 @@ class Dodger(object):
             gamma:  <float>  value decay rate   (default = 1)
             n:      <int>    number of back steps to update (default = 1)
         """
-        self.epsilon = 0.2  # chance of taking a random action instead of the best
-
-        # self.epsilon = 0
-        # self.alpha = 0.6
+        #self.epsilon = 0.2  # chance of taking a random action instead of the best
 
         self.q_table = {}
         self.n, self.alpha, self.gamma = n, alpha, gamma
+
+        self.epsilon = 0.01
+        self.alpha = 0.6
 
     def hard_coded_policy(self): # TODO XD
         return 0
@@ -529,7 +529,7 @@ if __name__ == '__main__':
             dodger.run(agent_host)
             elapsed_time = time.time() - start_time
             print "Episode", (iRepeat/2), "length:", elapsed_time
-            if (iRepeat/2) > 500:
+            if num_of_fireball > 1500:
                 exit()
 
         time.sleep(0.5)
