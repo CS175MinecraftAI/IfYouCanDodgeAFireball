@@ -76,23 +76,23 @@ def angvel(target, current, scale):
     return (2.0 / (1.0 + math.exp(-delta/scale))) - 1.0
 
 def resummon_Ghast(name):
-    if len(name) >= 4 or len(name) == 0:
+    if len(name) >= 6 or len(name) == 0:
         return 0
     print "Ghasts_alive : ", name
 
     if "Ghast_1" not in name:
         agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
-    if "Ghast_2" not in name:
-        agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
+    # if "Ghast_2" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
     if "Ghast_3" not in name:
         agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
     if "Ghast_4" not in name:
         agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
 
-    # if "Ghast_5" not in name:
-    #     agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
-    # if "Ghast_6" not in name:
-    #     agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
+    if "Ghast_5" not in name:
+        agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
+    if "Ghast_6" not in name:
+        agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
     # if "Ghast_7" not in name:
     #     agent_host.sendCommand('chat /summon Ghast -30 230 -15 {CustomName:Ghast_7}')
     # if "Ghast_8" not in name:
@@ -410,12 +410,12 @@ class Dodger(object):
             T = sys.maxint
             for t in xrange(sys.maxint):
                 agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,250d,35d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,250d,-15d]}')
+                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,250d,-15d]}') #south
                 agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,250d,10d]}')
                 agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,250d,10d]}')
 
-                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_5] {Pos:[-30d,250d,35d]}')
-                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_6] {Pos:[30d,250d,35d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_5] {Pos:[-30d,250d,35d]}')
+                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_6] {Pos:[30d,250d,35d]}')
                 # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_7] {Pos:[-30d,250d,-15d]}')
                 # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_8] {Pos:[30d,250d,-15]}')
 
@@ -514,12 +514,12 @@ if __name__ == '__main__':
             time.sleep(0.2)
 
             agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
-            agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
+            #agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
             agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
             agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
 
-            # agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
-            # agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
+            agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
+            agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
             # agent_host.sendCommand('chat /summon Ghast -30 230 -15 {CustomName:Ghast_7}')
             # agent_host.sendCommand('chat /summon Ghast 30 230 -15 {CustomName:Ghast_8}')
 
