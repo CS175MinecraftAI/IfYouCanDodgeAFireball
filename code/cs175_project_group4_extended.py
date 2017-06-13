@@ -215,8 +215,7 @@ class Dodger(object):
         self.n, self.alpha, self.gamma = n, alpha, gamma
 
         self.epsilon = 0.01
-        self.alpha = 0.3
-        self.gamma = 0.4
+        self.alpha = 0.6
 
     def hard_coded_policy(self): # TODO XD
         return 0
@@ -578,6 +577,6 @@ if __name__ == '__main__':
 
         time.sleep(0.05)
 
-    print "Episode length map:", episode_length_map
+    print "Life length map:", episode_length_map
 
     print "Mission ended"
