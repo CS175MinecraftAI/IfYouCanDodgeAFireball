@@ -76,23 +76,23 @@ def angvel(target, current, scale):
     return (2.0 / (1.0 + math.exp(-delta/scale))) - 1.0
 
 def resummon_Ghast(name):
-    if len(name) >= 6 or len(name) == 0:
+    if len(name) >= 3 or len(name) == 0:
         return 0
     print "Ghasts_alive : ", name
 
     if "Ghast_1" not in name:
         agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
-    # if "Ghast_2" not in name:
-    #     agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
+    if "Ghast_2" not in name:
+        agent_host.sendCommand('chat /summon Ghast 10 230 20 {CustomName:Ghast_2}')
     if "Ghast_3" not in name:
-        agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
-    if "Ghast_4" not in name:
-        agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
+        agent_host.sendCommand('chat /summon Ghast -10 230 20 {CustomName:Ghast_3}')
 
-    if "Ghast_5" not in name:
-        agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
-    if "Ghast_6" not in name:
-        agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
+    # if "Ghast_4" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
+    # if "Ghast_5" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
+    # if "Ghast_6" not in name:
+    #     agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
     # if "Ghast_7" not in name:
     #     agent_host.sendCommand('chat /summon Ghast -30 230 -15 {CustomName:Ghast_7}')
     # if "Ghast_8" not in name:
@@ -210,13 +210,12 @@ class Dodger(object):
             gamma:  <float>  value decay rate   (default = 1)
             n:      <int>    number of back steps to update (default = 1)
         """
-        #self.epsilon = 0.2  # chance of taking a random action instead of the best
 
         self.q_table = {}
         self.n, self.alpha, self.gamma = n, alpha, gamma
 
         self.epsilon = 0.01
-        self.alpha = 0.9
+        self.alpha = 0.3
         self.gamma = 0.4
 
     def hard_coded_policy(self): # TODO XD
@@ -227,7 +226,6 @@ class Dodger(object):
             return 0
 
         dist_to_midpoint = distance_2d(player_loc, mid_point) # No rounding
-        distance_reward = 0
         if (dist_to_midpoint <= 3):
             distance_reward = (3 - dist_to_midpoint) * -10
         else:
@@ -261,6 +259,26 @@ class Dodger(object):
         elif (loc_x < -7):
             corner_val = 4
 
+        if corner_val == 0: # Let's check for almost corner values
+            if loc_z == 18:
+                if loc_x == 9:
+                    corner_val = 9
+                elif loc_x == -7:
+                    corner_val = 10
+                else:
+                    corner_val = 11
+            elif loc_z == 1:
+                if loc_x == 9:
+                    corner_val = 12
+                elif loc_x == -7:
+                    corner_val = 13
+                else:
+                    corner_val = 14
+            elif loc_x == 9:
+                corner_val = 15
+            elif loc_x == -7:
+                corner_val = 16
+
         return corner_val
 
     def get_curr_state(self):
@@ -270,6 +288,9 @@ class Dodger(object):
         if (mid_point[0] == 1000):
             dx_midpoint = None
             dz_midpoint = None
+
+        # Assuming dx/dz both go from [-6,6]
+        # Number of estimated states = 9 * 12 * 12 = 1,296
 
         return self.get_corner_val(), dx_midpoint, dz_midpoint
 
@@ -363,13 +384,13 @@ class Dodger(object):
         
         # Actions are move_left, move_right, nothing
         if action == "move_left":
-            agent_host.sendCommand("strafe -2")
+            agent_host.sendCommand("strafe -1")
         elif action == "move_right":
-            agent_host.sendCommand("strafe 2")
+            agent_host.sendCommand("strafe 1")
         elif action == "move_forward":
-            agent_host.sendCommand("move 2")
+            agent_host.sendCommand("move 1")
         elif action == "move_backward":
-            agent_host.sendCommand("move -2")
+            agent_host.sendCommand("move -1")
         else: # Do nothing
             agent_host.sendCommand("strafe 0")
             agent_host.sendCommand("move 0")
@@ -400,63 +421,69 @@ class Dodger(object):
         while not done_update:
             set_world_observations(agent_host)
 
-            s0 = self.get_curr_state()
-            possible_actions = self.get_possible_actions(agent_host, True)
-            a0 = self.choose_action(s0, possible_actions, self.epsilon, self.q_table)
-            S.append(s0)
-            A.append(a0)
-            R.append(0)
+            if mid_point[0] != 1000: # Episode started
+                s0 = self.get_curr_state()
+                possible_actions = self.get_possible_actions(agent_host, True)
+                a0 = self.choose_action(s0, possible_actions, self.epsilon, self.q_table)
+                S.append(s0)
+                A.append(a0)
+                R.append(0)
 
-            T = sys.maxint
-            for t in xrange(sys.maxint):
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,250d,35d]}')
-                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[0d,250d,-15d]}') #south
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-30d,250d,10d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,250d,10d]}')
+                T = sys.maxint
+                for t in xrange(sys.maxint):
+                    agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_1] {Pos:[0d,250d,30d]}')
+                    agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_2] {Pos:[10d,250d,35d]}')
+                    agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_3] {Pos:[-10d,250d,25d]}')
 
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_5] {Pos:[-30d,250d,35d]}')
-                agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_6] {Pos:[30d,250d,35d]}')
-                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_7] {Pos:[-30d,250d,-15d]}')
-                # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_8] {Pos:[30d,250d,-15]}')
+                    # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_4] {Pos:[30d,250d,10d]}')
+                    # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_5] {Pos:[-30d,250d,35d]}')
+                    # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_6] {Pos:[30d,250d,35d]}')
+                    # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_7] {Pos:[-30d,250d,-15d]}')
+                    # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100,name=Ghast_8] {Pos:[30d,250d,-15]}')
 
-                set_world_observations(agent_host)
+                    set_world_observations(agent_host)
 
-                if t < T:
-                    if player_life <= 0: # Player dies, end of episode
-                        # Terminating state
-                        T = t + 1
-                        S.append('Term State')
-                        final_reward = self.calculate_reward()
-                        R.append(final_reward)
-                    else:
-                        self.act(agent_host, A[-1]) # Do an action
-                        time.sleep(0.1) # Gives time to act before getting feedback.
-                        print "Did:", A[-1], "Reward:", self.calculate_reward(), "State:", self.get_curr_state() 
-                        R.append(self.calculate_reward())
+                    if t < T:
+                        if player_life <= 0 or mid_point[0] == 1000: # Player dies or no fireballs, end of episode
+                            # Terminating state
+                            T = t + 1
+                            S.append('Term State')
+                            final_reward = self.calculate_reward()
+                            R.append(final_reward)
+                        else:
+                            self.act(agent_host, A[-1]) # Do an action
+                            time.sleep(0.1) # Gives time to act before getting feedback.
+                            print "Did:", A[-1], "Reward:", self.calculate_reward(), "State:", self.get_curr_state() 
+                            R.append(self.calculate_reward())
 
-                        s = self.get_curr_state()
-                        S.append(s)
-                        possible_actions = self.get_possible_actions(agent_host)
-                        next_a = self.choose_action(s, possible_actions, self.epsilon, self.q_table)
-                        A.append(next_a)
+                            s = self.get_curr_state()
+                            S.append(s)
+                            possible_actions = self.get_possible_actions(agent_host)
+                            next_a = self.choose_action(s, possible_actions, self.epsilon, self.q_table)
+                            A.append(next_a)
 
-                tau = t - self.n + 1
-                if tau >= 0:
-                    self.update_q_table(tau, S, A, R, T)
-
-                if tau == T - 1:
-                    while len(S) > 1:
-                        tau = tau + 1
+                    tau = t - self.n + 1
+                    if tau >= 0:
                         self.update_q_table(tau, S, A, R, T)
-                    done_update = True
-                    break
+
+                    if tau == T - 1:
+                        while len(S) > 1:
+                            tau = tau + 1
+                            self.update_q_table(tau, S, A, R, T)
+                        done_update = True
+                        break
+
+            else:
+                time.sleep(0.05)
+
+            if player_life <= 0: # Fail-safe
+                break
 
 # ------------------------------------------------------------------------------------------------ #
 # ----------------------------------------END AGENT CLASS----------------------------------------- #
 # ------------------------------------------------------------------------------------------------ #
 
 if __name__ == '__main__':
-
     agent_host = MalmoPython.AgentHost()
     try:
         agent_host.parse( sys.argv )
@@ -471,6 +498,10 @@ if __name__ == '__main__':
         exit(0) # TODO: discover test-time folder names
 
     started = False
+
+    episode_length_map = {}
+    life_num = 1
+    life_start_time = -1
 
     num_reps = 30000
     dodger = Dodger()
@@ -514,25 +545,39 @@ if __name__ == '__main__':
             time.sleep(0.2)
 
             agent_host.sendCommand('chat /summon Ghast 0 230 35 {CustomName:Ghast_1}')
-            #agent_host.sendCommand('chat /summon Ghast 0 230 -15 {CustomName:Ghast_2}')
-            agent_host.sendCommand('chat /summon Ghast -30 230 10 {CustomName:Ghast_3}')
-            agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
+            agent_host.sendCommand('chat /summon Ghast 0 230 10 {CustomName:Ghast_2}')
+            agent_host.sendCommand('chat /summon Ghast 0 230 10 {CustomName:Ghast_3}')
 
-            agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
-            agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
+            # agent_host.sendCommand('chat /summon Ghast 30 230 10 {CustomName:Ghast_4}')
+            # agent_host.sendCommand('chat /summon Ghast -30 230 35 {CustomName:Ghast_5}')
+            # agent_host.sendCommand('chat /summon Ghast 30 230 35 {CustomName:Ghast_6}')
             # agent_host.sendCommand('chat /summon Ghast -30 230 -15 {CustomName:Ghast_7}')
             # agent_host.sendCommand('chat /summon Ghast 30 230 -15 {CustomName:Ghast_8}')
 
-            agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
+            # agent_host.sendCommand('chat /entitydata @e[type=Ghast,r=100] {Invulnerable:1}') # Make Ghast invulnerable so they don't kill eachother.
+
+            time.sleep(0.5)
         else:
             print "Iteration", (iRepeat/2), 'Learning Q-Table'
             start_time = time.time()
+
+            if life_start_time == -1:
+                life_start_time = time.time()
+
             dodger.run(agent_host)
             elapsed_time = time.time() - start_time
-            print "Episode", (iRepeat/2), "length:", elapsed_time
-            if num_of_fireball > 500:
-                exit()
 
-        time.sleep(0.5)
+            if player_life <= 0: # Player died
+                episode_length_map[life_num] = time.time() - life_start_time
+                print "Life", life_num, "length:", time.time() - life_start_time
+                life_num += 1
+                life_start_time = -1
+
+            if life_num > 20:
+                break
+
+        time.sleep(0.05)
+
+    print "Episode length map:", episode_length_map
 
     print "Mission ended"
