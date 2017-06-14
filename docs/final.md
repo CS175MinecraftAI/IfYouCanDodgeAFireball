@@ -77,7 +77,7 @@ Players in Minecraft can wear armor that allows them to take less damage. We hav
 #### Armoured player
 The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times -in seconds- over life.
 
-<img src="http://i.imgur.com/GUX4mug.png"/>
+<img src="http://i.imgur.com/LYCRnqp.png"/>
 
 If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
 
@@ -86,7 +86,7 @@ If we fit a linear regression line on the average line, it appears that the surv
 #### Unarmoured player
 The graph below demonstrates how long the unarmoured agent typically survives over 40 lives. Note that we ran the AI 5 separate times at 40 lives each and averaged the survival time over life.
 
-<img src="http://i.imgur.com/LYCRnqp.png"/>
+<img src="http://i.imgur.com/GUX4mug.png"/>
 
 If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
 
