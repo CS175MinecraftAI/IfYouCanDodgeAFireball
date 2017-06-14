@@ -7,7 +7,7 @@ title:  Final Report
 [![Click here to be redirected to our video demonstration](https://img.youtube.com/vi/wnPaqCjGIgA/0.jpg)](https://www.youtube.com/watch?v=wnPaqCjGIgA)
 
 ## Project Summary
-Project IfYouCanDodgeAFireball involves creating an AI agent in Minecraft that can survive as long as possible against a ghast attack. Ghasts are aggressive flying monsters in Minecraft that shoot fireballs at players. A direct hit from a fireball can do up to 3 damage to an unarmoured player, and since players in Minecraft only have a default health of 10, our agent must intelligently avoid fireballs in order to maximize its survival tim.
+Project IfYouCanDodgeAFireball involves creating an AI agent in Minecraft that can survive as long as possible against a ghast attack. Ghasts are aggressive flying monsters in Minecraft that shoot fireballs at players. A direct hit from a fireball can do up to 3 damage to an unarmoured player, and since players in Minecraft only have a default health of 10, our agent must intelligently avoid fireballs in order to maximize its survival time.
 
 ### Image of a Ghast in Minecraft
 <img src="http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg" width="400" height="350"/>
@@ -35,7 +35,7 @@ The Q-learning algorithm selects the action with the highest Q-value for a given
 #### Constant values that seemed to work well for our environment:
 α = 0.6 - Based on our observations, an alpha close to 1 helps the agent learn faster. However, multiple fireballs can sometimes collide with each other in mid air, resulting in a change of direction that has a chance to hit the agent even though our agent had already moved to an expected safe position, resulting in a false negative reward. If we set α too close to 1, it may adjust the Q-table's values too much in odd situations where false negative rewards are given.
 
-γ = 1 - gamma set close 1 will make the agent strive for a long-term high reward. For our case, this is the perfect value, since we want our agent to get more hit in the beginning and survive longer in the end.
+γ = 1 - gamma set close to 1 will make the agent strive for a long-term high reward. For our case, this is the perfect value, since we want our agent to get more hit in the beginning and survive longer in the end.
 
 ε = 0.01 - Epsilon refers to how often our AI will do a random action rather than the action with the highest Q-value. We set this close to 0 as our agent benefits very little from random actions.
 
