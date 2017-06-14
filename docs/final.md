@@ -33,6 +33,7 @@ We are using Q-learning, a type of reinforcement learning, to approach the probl
 The Q-learning algorithm selects the action with the highest Q-value for a given state. The Q-value is calculated based on rewards resulting from a state, and constants α (alpha) and γ (gamma). We also use constants ε (epsilon), and n to tweak how the algorithm behaves over time.
 
 #### Constant values that seemed to work well for our environment:
+α = 0.6 - Based on our observations, an alpha close to 1 helps the agent learn faster. However, multiple fireballs have a unique condition when they can collide with each other in mid air, resulting of direction change that has a chance to hit the agent eventhough our agent already move to an expected save position. If we set α value into 1, it will make the agent adjust its q-table with a big negative value.
 
 γ = 1 - gamma set into 1 will make the agent strive for a long-term high reward. For our case, this is the perfect value, since we want our agent to get more hit in the beginning and survive longer in the end.
 
