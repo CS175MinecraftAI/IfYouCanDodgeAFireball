@@ -72,13 +72,23 @@ We give a higher reward to the agent the farther the agent moves from the fireba
 We will asses our AI using both qualitative and quantitative methods and demonstrate how our agent runs under different situations.
 
 ## Quantitative evaluation
-Players in Minecraft can wear armor that allows them to take less damage. We have ran our AI using an agent with diamond armor (no helmet) and without any armor. The graphs below demonstrate how long the agent survives over a number of lives.
+Players in Minecraft can wear armor that allows them to take less damage. We have ran our AI using an agent wearing diamond armor (no helmet) and without any armor. The graphs below demonstrate how long the agent survives over a number of lives with and without armor.
 
 ### Armoured player
-The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each and averaged the survival time over life.
+The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times over life.
+<img src="http://i.imgur.com/H0ic7BY.png"/>
+
+If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
+<img src="http://i.imgur.com/yjeiD9n.png"/>
 
 ### Unarmoured player
 The graph below demonstrates how long the unarmoured agent typically survives over 40 lives. Note that we ran the AI 5 separate times at 40 lives each and averaged the survival time over life.
+<img src="http://i.imgur.com/gltox8d.png"/>
+
+If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
+<img src="http://i.imgur.com/92QChDz.png"/>
+
+The unarmoured agent's performance is less consistent due to the fact that one small mistake can cause death rather quickly in comparison to the armoured agent.
 
 From both graphs it is easy to see that the agent dies quickly at early lives and over time learns how to survive longer.
 
