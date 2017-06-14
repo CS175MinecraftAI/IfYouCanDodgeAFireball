@@ -94,7 +94,7 @@ If we fit a linear regression line on the average line, it appears that the surv
 
 <img src="http://i.imgur.com/O9cPuu7.png"/>
 
-The unarmoured agent's performance is less consistent due to the fact that one small mistake can cause death rather quickly in comparison to the armoured agent.
+The unarmoured agent's performance is less consistent due to the fact that one small mistake can cause death rather quickly in comparison to the armoured agent. Inconsistencies in either graph can be due to the agent getting itself into unfamiliar states, typically near the corners of the movement area.
 
 From both graphs it is easy to see that the agent dies fairly quickly at early lives and over time learns how to survive longer.
 
