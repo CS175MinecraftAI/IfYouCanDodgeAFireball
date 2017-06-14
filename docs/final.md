@@ -7,7 +7,7 @@ title:  Final Report
 [![Click here to be redirected to our video demonstration](https://img.youtube.com/vi/wnPaqCjGIgA/0.jpg)](https://www.youtube.com/watch?v=wnPaqCjGIgA)
 
 ## Project Summary
-Project IfYouCanDodgeAFireball involves creating an AI agent in Minecraft that can survive as long as possible against a ghast attack. Ghasts are aggressive flying monsters in Minecraft that shoot fireballs at players. A direct hit from a fireball can do up to 3 damage to an unarmoured player, and since players in Minecraft only have a default health of 10, our agent must intelligently avoid fireballs in order to maximize its lifetime.
+Project IfYouCanDodgeAFireball involves creating an AI agent in Minecraft that can survive as long as possible against a ghast attack. Ghasts are aggressive flying monsters in Minecraft that shoot fireballs at players. A direct hit from a fireball can do up to 3 damage to an unarmoured player, and since players in Minecraft only have a default health of 10, our agent must intelligently avoid fireballs in order to maximize its survival tim.
 
 ### Image of a Ghast in Minecraft
 <img src="http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg" width="400" height="350"/>
@@ -33,9 +33,9 @@ We are using Q-learning, a type of reinforcement learning, to approach the probl
 The Q-learning algorithm selects the action with the highest Q-value for a given state. The Q-value is calculated based on rewards resulting from a state, and constants α (alpha) and γ (gamma). We also use constants ε (epsilon), and n to tweak how the algorithm behaves over time.
 
 #### Constant values that seemed to work well for our environment:
-α = 0.6 - Based on our observations, an alpha close to 1 helps the agent learn faster. However, multiple fireballs have a unique condition when they can collide with each other in mid air, resulting of direction change that has a chance to hit the agent eventhough our agent already move to an expected save position. If we set α value into 1, it will make the agent adjust its q-table with a big negative value.
+α = 0.6 - Based on our observations, an alpha close to 1 helps the agent learn faster. However, multiple fireballs can sometimes collide with each other in mid air, resulting in a change of direction that has a chance to hit the agent even though our agent had already moved to an expected safe position, resulting in a false negative reward. If we set α too close to 1, it may adjust the Q-table's values too much in odd situations where false negative rewards are given.
 
-γ = 1 - gamma set into 1 will make the agent strive for a long-term high reward. For our case, this is the perfect value, since we want our agent to get more hit in the beginning and survive longer in the end.
+γ = 1 - gamma set close 1 will make the agent strive for a long-term high reward. For our case, this is the perfect value, since we want our agent to get more hit in the beginning and survive longer in the end.
 
 ε = 0.01 - Epsilon refers to how often our AI will do a random action rather than the action with the highest Q-value. We set this close to 0 as our agent benefits very little from random actions.
 
@@ -45,14 +45,14 @@ n = 1 - The default n, refers to number of backsteps to update. Works well for o
 In our status report we showed two different methods of calculating our state. Now we only have 1 reliable method of state calculation.
 
 #### Encoding agent location
-The agent's location is very important information in determining how to dodge fireballs, since if the agent is close to a wall, their movement becomes restricted. Since our agent's walking area is a 20x20 square, encoding the agent's location into the state would add 400 times more states. Instead we decided to encode something we called a 'corner value' that describes a zone where the agent is within the movement area.
+The agent's location is very important information in determining how to dodge fireballs, since if the agent is close to a wall, their movement becomes restricted. Since our agent's walking area is a 20x20 square, encoding the agent's location into the state would add 400 times more states. Instead, we decided to encode something we called a 'corner value' that describes a zone where the agent is within the movement area.
 
 #### Visualization of corner values in relation to environment
 <img src="http://i.imgur.com/vbAyiNu.png"/>
 
 For example, if the agent's corner value is '8', then the agent would realize that it would be unable to move left. Corner values 1-8 represent zones where the agent's movement is restricted. Corner values 9-16 are used as 'warning zones' to let the agent know that it is getting close to a movement restricting zone. Corner value 0 represents the zone where the agent has the most freedom to move in the middle of the area.
 
-#### Encoding fireball cluster target location
+#### Encoding the fireball cluster point
 If a player wants to dodge fireballs, then they need to move away from the fireballs projected target location. Our approach is very similar. When the agent detects that a new fireball has been shot by a ghast, the agent assumes the fireball is aimed at the agent's current location. The agent keeps track of all currently live fireballs and their projected target locations and calculates the 'midpoint' between all target locations called the 'fireball cluster point'. The fireball cluster point is what the agent should try to move away from. We discretely encode the delta x and delta y between the agent's current location and the fireball cluster point.
 
 #### Visualization of midpoint calculation
@@ -75,26 +75,27 @@ We will asses our AI using both qualitative and quantitative methods and demonst
 Players in Minecraft can wear armor that allows them to take less damage. We have ran our AI using an agent wearing diamond armor (no helmet) and without any armor. The graphs below demonstrate how long the agent survives over a number of lives with and without armor.
 
 #### Armoured player
-The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times -in seconds- over life.
+The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times (in seconds) over life.
 
 <img src="http://i.imgur.com/LYCRnqp.png"/>
+According to the graph, during one run, the agent was able to survive up to 600 seconds on its 11th life.
 
-If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
+If we fit a linear regression line on the average line, it appears that the survival time of the agent is increasing the higher the life number.
 
 <img src="http://i.imgur.com/KWIx8v5.png"/>
 
 #### Unarmoured player
-The graph below demonstrates how long the unarmoured agent typically survives over 40 lives. Note that we ran the AI 5 separate times at 40 lives each and averaged the survival time over life.
+The graph below demonstrates how long the unarmoured agent typically survives over 40 lives. Note that we ran the AI 5 separate times at 40 lives each and averaged the survival time (in seconds) over life.
 
 <img src="http://i.imgur.com/GUX4mug.png"/>
 
-If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
+If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number just as it was with the armoured agent.
 
 <img src="http://i.imgur.com/O9cPuu7.png"/>
 
 The unarmoured agent's performance is less consistent due to the fact that one small mistake can cause death rather quickly in comparison to the armoured agent.
 
-From both graphs it is easy to see that the agent dies quickly at early lives and over time learns how to survive longer.
+From both graphs it is easy to see that the agent dies fairly quickly at early lives and over time learns how to survive longer.
 
 ### Qualitative evaluation
 One way to qualitatively evaluate the AI is to simply watch it dodge fireballs and try to see if the AI is actually trying to dodge fireballs or if the AI is just dodging randomly. We have made a video located at the top of this page to demonstrate how the agent learns to dodge fireballs over a training period of about 20 minutes.
