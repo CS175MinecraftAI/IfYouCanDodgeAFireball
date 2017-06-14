@@ -33,9 +33,8 @@ We are using Q-learning, a type of reinforcement learning, to approach the probl
 The Q-learning algorithm selects the action with the highest Q-value for a given state. The Q-value is calculated based on rewards resulting from a state, and constants α (alpha) and γ (gamma). We also use constants ε (epsilon), and n to tweak how the algorithm behaves over time.
 
 #### Constant values that seemed to work well for our environment:
-α = 0.6 - Based on our observations, an alpha close to 1 helps the agent learn faster. Since our solution does not rely on randomness, a higher alpha seems to allow the agent to learn more quickly.
 
-γ = 1 - This is the default decay rate and it seems to work well for our purposes.
+γ = 1 - gamma set into 1 will make the agent strive for a long-term high reward. For our case, this is the perfect value, since we want our agent to get more hit in the beginning and survive longer in the end.
 
 ε = 0.01 - Epsilon refers to how often our AI will do a random action rather than the action with the highest Q-value. We set this close to 0 as our agent benefits very little from random actions.
 
@@ -71,11 +70,11 @@ We give a higher reward to the agent the farther the agent moves from the fireba
 ## Evaluation
 We will asses our AI using both qualitative and quantitative methods and demonstrate how our agent runs under different situations.
 
-## Quantitative evaluation
+### Quantitative evaluation
 Players in Minecraft can wear armor that allows them to take less damage. We have ran our AI using an agent wearing diamond armor (no helmet) and without any armor. The graphs below demonstrate how long the agent survives over a number of lives with and without armor.
 
-### Armoured player
-The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times over life.
+#### Armoured player
+The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times -in seconds- over life.
 
 <img src="http://i.imgur.com/GUX4mug.png"/>
 
@@ -83,7 +82,7 @@ If we fit a linear regression line on the average line, it appears that the surv
 
 <img src="http://i.imgur.com/KWIx8v5.png"/>
 
-### Unarmoured player
+#### Unarmoured player
 The graph below demonstrates how long the unarmoured agent typically survives over 40 lives. Note that we ran the AI 5 separate times at 40 lives each and averaged the survival time over life.
 
 <img src="http://i.imgur.com/LYCRnqp.png"/>
@@ -96,7 +95,7 @@ The unarmoured agent's performance is less consistent due to the fact that one s
 
 From both graphs it is easy to see that the agent dies quickly at early lives and over time learns how to survive longer.
 
-## Qualitative evaluation
+### Qualitative evaluation
 One way to qualitatively evaluate the AI is to simply watch it dodge fireballs and try to see if the AI is actually trying to dodge fireballs or if the AI is just dodging randomly. We have made a video located at the top of this page to demonstrate how the agent learns to dodge fireballs over a training period of about 20 minutes.
 
 ## References
@@ -105,14 +104,21 @@ In order to understand the Q-Learning algorithm, we used the class book and assi
 We also used the below websites in order to figure out how to edit entity data, send commands, and other useful information about working with Malmo and Minecraft.
 
 Minecraft:
-[a link](https://www.digminecraft.com/game_commands/)Commands and Cheats
-[a link](http://minecraft.gamepedia.com/Ghast)Ghast About
-[a link](http://www.minecraftforum.net/forums)www.minecraftforum.net
+
+[Commands and Cheats](https://www.digminecraft.com/game_commands/)
+
+[Ghast About](http://minecraft.gamepedia.com/Ghast)
+
+[www.minecraftforum.net](http://www.minecraftforum.net/forums)
 
 Malmo:
-[a link](http://microsoft.github.io/malmo/0.21.0/Documentation/index.html)Documentation
-[a link](https://github.com/Microsoft/malmo/)Github
-[a link](https://github.com/Microsoft/malmo/issues)Issues
+
+[Documentation](http://microsoft.github.io/malmo/0.21.0/Documentation/index.html)
+
+[Github](https://github.com/Microsoft/malmo/)
+
+[Issues](https://github.com/Microsoft/malmo/issues)
 
 Ghast Picture:
-[a link](http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg)ghast
+
+[Ghast](http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg)
