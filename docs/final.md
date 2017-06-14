@@ -76,17 +76,21 @@ Players in Minecraft can wear armor that allows them to take less damage. We hav
 
 ### Armoured player
 The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times over life.
-<img src="http://i.imgur.com/H0ic7BY.png"/>
+
+<img src="http://i.imgur.com/GUX4mug.png"/>
 
 If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
-<img src="http://i.imgur.com/yjeiD9n.png"/>
+
+<img src="http://i.imgur.com/KWIx8v5.png"/>
 
 ### Unarmoured player
 The graph below demonstrates how long the unarmoured agent typically survives over 40 lives. Note that we ran the AI 5 separate times at 40 lives each and averaged the survival time over life.
-<img src="http://i.imgur.com/gltox8d.png"/>
+
+<img src="http://i.imgur.com/LYCRnqp.png"/>
 
 If we fit a linear regression line on the average line, it appears that the survival time is increasing the higher the life number.
-<img src="http://i.imgur.com/92QChDz.png"/>
+
+<img src="http://i.imgur.com/O9cPuu7.png"/>
 
 The unarmoured agent's performance is less consistent due to the fact that one small mistake can cause death rather quickly in comparison to the armoured agent.
 
@@ -98,4 +102,17 @@ One way to qualitatively evaluate the AI is to simply watch it dodge fireballs a
 ## References
 In order to understand the Q-Learning algorithm, we used the class book and assignment 2 as most of our reference material.
 
-We also used the below websites in order to figure out how to edit entity data, send commands, and other useful information about Minecraft.
+We also used the below websites in order to figure out how to edit entity data, send commands, and other useful information about working with Malmo and Minecraft.
+
+Minecraft:
+[a link](https://www.digminecraft.com/game_commands/)Commands and Cheats
+[a link](http://minecraft.gamepedia.com/Ghast)Ghast About
+[a link](http://www.minecraftforum.net/forums)www.minecraftforum.net
+
+Malmo:
+[a link](http://microsoft.github.io/malmo/0.21.0/Documentation/index.html)Documentation
+[a link](https://github.com/Microsoft/malmo/)Github
+[a link](https://github.com/Microsoft/malmo/issues)Issues
+
+Ghast Picture:
+[a link](http://www.minecraftseedspc.com/wp-content/uploads/2015/11/Ghast_Minecraft_06.jpg)ghast
