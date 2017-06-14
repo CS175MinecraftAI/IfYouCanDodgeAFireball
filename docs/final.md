@@ -78,6 +78,7 @@ Players in Minecraft can wear armor that allows them to take less damage. We hav
 The graph below demonstrates how long the armoured agent typically survives over 15 lives. Note that we ran the AI 5 separate times at 15 lives each. The thicker yellow line represents the average of survival times (in seconds) over life.
 
 <img src="http://i.imgur.com/LYCRnqp.png"/>
+
 According to the graph, during one run, the agent was able to survive up to 600 seconds on its 11th life.
 
 If we fit a linear regression line on the average line, it appears that the survival time of the agent is increasing the higher the life number.
