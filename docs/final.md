@@ -108,6 +108,8 @@ Minecraft:
 
 [Commands and Cheats](https://www.digminecraft.com/game_commands/)
 
+[Ghast Entity Data](https://www.digminecraft.com/data_tags/ghast.php)
+
 [Ghast About](http://minecraft.gamepedia.com/Ghast)
 
 [www.minecraftforum.net](http://www.minecraftforum.net/forums)
